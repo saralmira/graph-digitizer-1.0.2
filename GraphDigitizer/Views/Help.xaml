@@ -1,0 +1,17 @@
+﻿<Window x:Class="GraphDigitizer.Views.Help"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource tip_help}" Height="319" Width="453" Icon="../Resources/Help.png" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <TabControl Name="HelpPanel">
+            <TabItem Header="{DynamicResource tip_general}" Name="GeneralTab" GotFocus="OnGeneralTabGotFocus">
+                <Grid></Grid>
+            </TabItem>
+            <TabItem Header="{DynamicResource tip_shortcuts}" Name="KeysTab" GotFocus="OnKeysTabGotFocus" />
+            <TabItem Header="{DynamicResource tip_about}" GotFocus="OnAboutTabGotFocus" />
+        </TabControl>
+        <DockPanel Margin="5,27,5,5" Name="ContentPanel">
+            <RichTextBox Name="ContentEdit" VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
+        </DockPanel>
+    </Grid>
+</Window>

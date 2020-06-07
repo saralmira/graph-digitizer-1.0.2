@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    >
+    <sys:String x:Key="tip_load">Load a new image</sys:String>
+    <sys:String x:Key="tip_loadfromcb">Load an image from the clipboard</sys:String>
+    <sys:String x:Key="tip_save">Save the current data in a file</sys:String>
+    <sys:String x:Key="tip_setaxes">Set the image axes</sys:String>
+    <sys:String x:Key="tip_setaxesprop">Set the properties of the axes</sys:String>
+    <sys:String x:Key="tip_seltool">Selection tool (Hotkey: 1)</sys:String>
+    <sys:String x:Key="tip_picktool">Pick point tool (Hotkey: 2)</sys:String>
+    <sys:String x:Key="tip_delallpoints">Delete all the selected points</sys:String>
+    <sys:String x:Key="tip_zoomin">Increase the amount of zoom in the side image</sys:String>
+    <sys:String x:Key="tip_zoomout">Decrease the amount of zoom in the side image</sys:String>
+    <sys:String x:Key="tip_enlarge">Enlarge the main image</sys:String>
+    <sys:String x:Key="tip_reduce">Reduce the main image</sys:String>
+    <sys:String x:Key="tip_restore">Restore the main image size</sys:String>
+    <sys:String x:Key="tip_showhelp">Show the help window (Hotkey: H)</sys:String>
+    <sys:String x:Key="tip_copypoints">Copy all the points to clipboard</sys:String>
+
+    <sys:String x:Key="tip_axestitle">Properties of the axes</sys:String>
+    <sys:String x:Key="tip_logaxis">Logarithmic axis</sys:String>
+    <sys:String x:Key="tip_help">Help</sys:String>
+    <sys:String x:Key="tip_general">General</sys:String>
+    <sys:String x:Key="tip_shortcuts">Key Shortcuts</sys:String>
+    <sys:String x:Key="tip_about">About</sys:String>
+
+    <sys:String x:Key="tip_screen">Screen:</sys:String>
+    <sys:String x:Key="tip_real">Real:</sys:String>
+    
+    <sys:String x:Key="tip_state_idle">Load an image with the button above</sys:String>
+    <sys:String x:Key="tip_state_axes0">Select the minor X value of the axes</sys:String>
+    <sys:String x:Key="tip_state_axes1">Select the major X value of the axes</sys:String>
+    <sys:String x:Key="tip_state_axes2">Select the minor Y value of the axes</sys:String>
+    <sys:String x:Key="tip_state_axes3">Select the major Y value of the axes</sys:String>
+    <sys:String x:Key="tip_state_points">Select any point you want to add to the data</sys:String>
+    <sys:String x:Key="tip_state_select">Click on any point to select it</sys:String>
+</ResourceDictionary>

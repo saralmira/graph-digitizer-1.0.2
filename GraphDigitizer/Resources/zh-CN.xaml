@@ -1,0 +1,38 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    >
+    <sys:String x:Key="tip_load">载入图片</sys:String>
+    <sys:String x:Key="tip_loadfromcb">从剪贴板载入图片</sys:String>
+    <sys:String x:Key="tip_save">保存数据到文件</sys:String>
+    <sys:String x:Key="tip_setaxes">设置轴</sys:String>
+    <sys:String x:Key="tip_setaxesprop">设置轴参数</sys:String>
+    <sys:String x:Key="tip_seltool">选择工具 (快捷键: 1)</sys:String>
+    <sys:String x:Key="tip_picktool">标点工具 (快捷键: 2)</sys:String>
+    <sys:String x:Key="tip_delallpoints">删除所有点</sys:String>
+    <sys:String x:Key="tip_zoomin">放大侧边图像</sys:String>
+    <sys:String x:Key="tip_zoomout">缩小侧边图像</sys:String>
+    <sys:String x:Key="tip_enlarge">放大主图像</sys:String>
+    <sys:String x:Key="tip_reduce">缩小主图像</sys:String>
+    <sys:String x:Key="tip_restore">恢复原图像大小</sys:String>
+    <sys:String x:Key="tip_showhelp">帮助 (快捷键: H)</sys:String>
+    <sys:String x:Key="tip_copypoints">复制所有点到剪贴板</sys:String>
+    
+    <sys:String x:Key="tip_axestitle">轴参数</sys:String>
+    <sys:String x:Key="tip_logaxis">对数坐标</sys:String>
+    <sys:String x:Key="tip_help">帮助</sys:String>
+    <sys:String x:Key="tip_general">一般项</sys:String>
+    <sys:String x:Key="tip_shortcuts">快捷键</sys:String>
+    <sys:String x:Key="tip_about">关于</sys:String>
+    
+    <sys:String x:Key="tip_screen">图像坐标：</sys:String>
+    <sys:String x:Key="tip_real">实际坐标：</sys:String>
+    
+    <sys:String x:Key="tip_state_idle">请选择或拖入图片</sys:String>
+    <sys:String x:Key="tip_state_axes0">选择 x 轴最小值</sys:String>
+    <sys:String x:Key="tip_state_axes1">选择 x 轴最大值</sys:String>
+    <sys:String x:Key="tip_state_axes2">选择 y 轴最小值</sys:String>
+    <sys:String x:Key="tip_state_axes3">选择 y 轴最大值</sys:String>
+    <sys:String x:Key="tip_state_points">选择图中的数据点</sys:String>
+    <sys:String x:Key="tip_state_select">点击任意一点以选择</sys:String>
+</ResourceDictionary>

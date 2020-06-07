@@ -1,0 +1,140 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        mc:Ignorable="d" x:Class="GraphDigitizer.Views.MainWindow"
+        Title="Graph Digitizer"
+        Height="540" 
+        Width="800" 
+        PreviewKeyUp="OnWindowPreviewKeyUp" 
+        PreviewKeyDown="OnWindowPreviewKeyDown" 
+        Icon="pack://application:,,,/Resources/graph.ico" 
+        WindowStartupLocation="CenterScreen"
+        Closed="OnWindowClosed" 
+        PreviewMouseUp="OnWindowPreviewMouseUp" 
+        Background="#FFC6D3D6">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="26" />
+            <RowDefinition Height="249*" />
+            <RowDefinition Height="4" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="22" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="303*" />
+        </Grid.ColumnDefinitions>
+        <Border Height="26" x:Name="brdToolBar" VerticalAlignment="Top" Grid.ColumnSpan="3" BorderBrush="#FF555555" BorderThickness="0,0,0,1">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFD4DFE2" Offset="0" />
+                    <GradientStop Color="#FFA7B7B9" Offset="0.651" />
+                    <GradientStop Color="#FFD4DFE2" Offset="0.314" />
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <DataGrid x:Name="dgrPoints" Grid.Row="1" Block.TextAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" ColumnWidth="95" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" FontSize="11" SelectionChanged="dgrPoints_SelectionChanged" IsReadOnly="True" Background="#FFE9EFF5" HeadersVisibility="Column" AutoGenerateColumns="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="#FF44587C" BorderThickness="0,0,0,1">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="ApplicationCommands.SelectAll" Header="Select All" />
+                    <MenuItem Command="ApplicationCommands.Copy" Header="Copy Points" />
+                    <MenuItem Header="Delete Selected" Click="DeleteSelection" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="X Value" Binding="{Binding Xform}" ClipboardContentBinding="{Binding X, StringFormat=F10}" />
+                <DataGridTextColumn Header="Y Value" Binding="{Binding Yform}" ClipboardContentBinding="{Binding Y, StringFormat=F10}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StatusBar x:Name="stbMain" Grid.Row="4" ClipToBounds="False" Background="{StaticResource dgrHeaderBackground}" Grid.ColumnSpan="3" BorderBrush="#FF555555" BorderThickness="0,1,0,0"/>
+        <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3">
+            <ScrollViewer x:Name="svwGraph" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Focusable="False" AllowDrop="True" DragDrop.DragEnter="File_DragEnter" DragDrop.Drop="File_Drop" PanningMode="Both">
+                <Canvas Height="100" x:Name="cnvGraph" Width="200" ClipToBounds="True" MouseMove="imgGraph_MouseMove" MouseDown="imgGraph_MouseDown" MouseUp="cnvGraph_MouseUp" Cursor="Cross" UseLayoutRounding="True" MouseWheel="cnvGraph_MouseWheel">
+                    <Image Height="150" x:Name="imgGraph" Width="200" Canvas.Left="0" Canvas.Top="0"/>
+                </Canvas>
+            </ScrollViewer>
+            <Button Height="20" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnEnlarge" VerticalAlignment="Top" Width="20" Click="OnEnlargeClicked" ToolTip="{DynamicResource tip_enlarge}" Style="{StaticResource ViewButtonStyle}">
+                <Image Source="../Resources/ZoomIn.png" Stretch="Uniform"/>
+            </Button>
+            <Button Height="20" HorizontalAlignment="Left" Margin="21,0,0,0" x:Name="btnReduce" VerticalAlignment="Top" Width="20" Click="OnReduceClicked" ToolTip="{DynamicResource tip_reduce}" Style="{StaticResource ViewButtonStyle}">
+                <Image Source="../Resources/ZoomOut.png" Stretch="Uniform"/>
+            </Button>
+        </Grid>
+        
+        <Border Grid.Column="2" Grid.Row="1" x:Name="brdSeparator" Grid.RowSpan="3" BorderBrush="#FF45597C" BorderThickness="1,0,0,0"/>
+        <Grid Grid.Row="3" Margin="0 1 0 0">
+            <Canvas x:Name="cnvZoom" ClipToBounds="True" MouseMove="cnvZoom_MouseMove" Cursor="Cross">
+                <Image Canvas.Left="0" Canvas.Top="0" Height="151" x:Name="imgZoom" Stretch="Fill" Width="155" MouseDown="imgZoom_MouseDown" />
+            </Canvas>
+            <Button Height="20" HorizontalAlignment="Right" Margin="0,0,21,0" x:Name="btnZoomIn" VerticalAlignment="Top" Width="20" Click="OnZoomInClicked" ToolTip="{DynamicResource tip_zoomin}" Style="{StaticResource ViewButtonStyle}">
+                <Image Source="../Resources/ZoomIn.png" Stretch="Uniform"/>
+            </Button>
+            <Button Height="20" HorizontalAlignment="Right" Margin="0,0,1,0" x:Name="btnZoomOut" VerticalAlignment="Top" Width="20" Click="OnZoomOutClicked" ToolTip="{DynamicResource tip_zoomout}" Style="{StaticResource ViewButtonStyle}">
+                <Image Source="../Resources/ZoomOut.png" Stretch="Uniform"/>
+            </Button>
+        </Grid>
+        <GridSplitter Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
+        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
+        <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" CanHorizontallyScroll="False" CanVerticallyScroll="False">
+            <Button Height="26" HorizontalAlignment="Left" x:Name="btnOpen" VerticalAlignment="Top" Width="30" Click="OnOpenClicked" ToolTip="{DynamicResource tip_load}" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/LoadPicture.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnFromClipboard" VerticalAlignment="Top" Width="30" Click="btnFromClipboard_Click" ToolTip="{DynamicResource tip_loadfromcb}" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Clipboard.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnSave" VerticalAlignment="Top" Width="30" Click="OnSaveClicked" ToolTip="{DynamicResource tip_save}" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Save.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnAxes" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_setaxes}" Click="btnAxes_Click" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Axes.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnAxesProp" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_setaxesprop}" Click="btnAxesProp_Click" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Properties.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnSelect" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_seltool}" Click="OnSelectClicked" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Select.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnPoints" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_picktool}" Click="OnPointsClicked" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Crosshair.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnDelPoints" VerticalAlignment="Top" Width="30" Click="OnDeletePointsClicked" ToolTip="{DynamicResource tip_delallpoints}" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Delete.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnRestore" VerticalAlignment="Top" Width="30" Click="OnRestoreClicked" ToolTip="{DynamicResource tip_restore}" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/OriginalSize.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" x:Name="btnCopy" VerticalAlignment="Top" Width="30" Click="OnCopyClicked" ToolTip="{DynamicResource tip_copypoints}" Style="{StaticResource ToolBarButtonStyle}" Margin="1,0,0,0">
+                <Image Source="../Resources/Copy.png"/>
+            </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnHelp" VerticalAlignment="Top" Width="30" Click="OnHelpClicked" ToolTip="{DynamicResource tip_showhelp}" Padding="0" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Help.png"/>
+            </Button>
+        </StackPanel>
+        <Border x:Name="brdDgrFix" Margin="188,0,0,0" Grid.Row="1" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="12" Background="{StaticResource dgrHeaderBackground}"/>
+        <Border Grid.ColumnSpan="3" Grid.Row="4" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left" Width="300">
+            <TextBlock x:Name="txtToolTip" Text="{DynamicResource tip_state_idle}" Margin="5,0,0,0" TextAlignment="Left" Grid.ColumnSpan="3" Foreground="#FFB4C4CE" VerticalAlignment="Center"/>
+        </Border>
+        <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Border HorizontalAlignment="Right" MinWidth="40" Height="20">
+                <TextBlock x:Name="txtScreenCoords" Text="{DynamicResource tip_screen}" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+            </Border>
+            <Border HorizontalAlignment="Right" MinWidth="50" Height="20">
+                <TextBlock x:Name="txtScreenX" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+            </Border>
+            <Border HorizontalAlignment="Right" MinWidth="50" Height="20">
+                <TextBlock x:Name="txtScreenY" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+            </Border>
+            <Border HorizontalAlignment="Right" MinWidth="35" Height="20">
+                <TextBlock x:Name="txtRealCoords" Text="{DynamicResource tip_real}" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+            </Border>
+            <Border HorizontalAlignment="Right" MinWidth="80" Height="20">
+                <TextBlock x:Name="txtRealX" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+            </Border>
+            <Border HorizontalAlignment="Right" MinWidth="80" Height="20">
+                <TextBlock x:Name="txtRealY" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
