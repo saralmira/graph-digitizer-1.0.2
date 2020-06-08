@@ -49,4 +49,12 @@ namespace GraphDigitizer
 
         public static string Lang = "en";
     }
+
+    public static class Local
+    {
+        public static string Dict(string key)
+        {
+            return (string)Application.Current.FindResource(key);
+        }
+    }
 }

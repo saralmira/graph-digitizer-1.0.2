@@ -99,6 +99,9 @@
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnPoints" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_picktool}" Click="OnPointsClicked" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Crosshair.png"/>
             </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnLine" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_line}" Click="OnLineClicked" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Line.png"/>
+            </Button>
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnDelPoints" VerticalAlignment="Top" Width="30" Click="OnDeletePointsClicked" ToolTip="{DynamicResource tip_delallpoints}" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Delete.png"/>
             </Button>

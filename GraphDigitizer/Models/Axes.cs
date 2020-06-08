@@ -17,6 +17,7 @@ namespace GraphDigitizer.Models
     {
         readonly Brush red = new SolidColorBrush(Color.FromArgb(0x90, 0xFF, 0x21, 0x21));
         readonly Brush blue = new SolidColorBrush(Color.FromArgb(0x90, 0x21, 0x21, 0xFF));
+        readonly Brush green = new SolidColorBrush(Color.FromArgb(0x90, 0x21, 0xFF, 0x21));
         readonly Brush point = new SolidColorBrush(Color.FromArgb(0x90, 0xFC, 0x8A, 0x45));
 
         public Crosshair()
@@ -63,31 +64,35 @@ namespace GraphDigitizer.Models
             ishide = hide;
         }
 
-        public void SetState(int state)
+        public void SetState(State state, int status = 0)
         {
-            if (laststate == state)
-                return;
-            switch (state)
+            if (state == State.Line)
             {
-                case 0:
-                case 1:
-                    X.Stroke = red;
-                    Y.Stroke = red;
-                    break;
-                case 2:
-                case 3:
-                    X.Stroke = blue;
-                    Y.Stroke = blue;
-                    break;
-                default:
-                    X.Stroke = point;
-                    Y.Stroke = point;
-                    break;
+                X.Stroke = green;
+                Y.Stroke = green;
             }
-            laststate = state;
+            else if (state == State.Points)
+            {
+                X.Stroke = point;
+                Y.Stroke = point;
+            }
+            else
+            {
+                switch (status)
+                {
+                    case 2:
+                    case 3:
+                        X.Stroke = blue;
+                        Y.Stroke = blue;
+                        break;
+                    default:
+                        X.Stroke = red;
+                        Y.Stroke = red;
+                        break;
+                }
+            }
         }
 
-        private int laststate = 0;
         private bool ishide = false;
         public Line X, Y;
     }

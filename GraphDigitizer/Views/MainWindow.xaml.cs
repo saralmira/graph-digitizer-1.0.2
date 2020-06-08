@@ -25,27 +25,43 @@ namespace GraphDigitizer.Views
 
         [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "GetCursorPos")]
         [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
-        private static extern bool GetCursorPos(out Point p);
+        private static extern bool GetCursorPos(out XYPoint p);
 
         [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "ClipCursor")]
         [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
         private static extern bool ClipCursor(ref Rect r);
 
+        public delegate Vector delCoordTransform(Vector p);
+        public static delCoordTransform ScreenToReal;
+        public static delCoordTransform RealToScreen;
+
         private bool precisionMode = false;
         private bool dragMode = false;
-        private System.Windows.Point previousPosition;
+        private Point previousPosition;
         private State state = State.Idle;
         private Axes axes = new Axes();
+        private LineModel linemodel = new LineModel() { Count = 2, ScreenOrReal = true };
         private readonly List<DataPoint> data = new List<DataPoint>();
         private readonly Crosshair Crossair = new Crosshair();
         private readonly Crosshair CrossairL = new Crosshair();
+        private Line LineTool = new Line()
+        {
+            Stroke = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0xE6, 0x00)),
+            Focusable = false,
+            IsHitTestVisible = false,
+            StrokeThickness = 2,
+            Visibility = Visibility.Hidden,
+            StrokeDashArray = new DoubleCollection { 5.0, 5.0 },
+            StrokeEndLineCap = PenLineCap.Round
+        };
+        private bool useLineTool = false;
 
         //Zoom properties, prop in percentage
         private double zoom = 2, prop = 100; 
         
         //Selection rectangle
         private bool selecting = false; //Selection rectangle off
-        private System.Windows.Point selFirstPos; //First rectangle corner
+        private Point selFirstPos; //First rectangle corner
         private Rectangle selRect; //SelectionRectangle
 
         //Help window
@@ -66,6 +82,8 @@ namespace GraphDigitizer.Views
         public MainWindow()
         {
             this.InitializeComponent();
+            ScreenToReal = this.ScreenToRealCoords;
+            RealToScreen = this.RealToScreenCoords;
             this.dgrPoints.ItemsSource = this.data;
             this.axes.Xmin.Value = 0.0;
             this.axes.Xmax.Value = 1.0;
@@ -74,8 +92,10 @@ namespace GraphDigitizer.Views
             this.zoom = Properties.Settings.Default.Zoom;
             this.cnvGraph.Children.Add(CrossairL.X);
             this.cnvGraph.Children.Add(CrossairL.Y);
+            this.cnvGraph.Children.Add(LineTool);
             this.cnvZoom.Children.Add(Crossair.X);
             this.cnvZoom.Children.Add(Crossair.Y);
+
             if (System.IO.File.Exists(Properties.Settings.Default.LastFile))
             {
                 this.OpenFile(Properties.Settings.Default.LastFile);
@@ -237,6 +257,9 @@ namespace GraphDigitizer.Views
                 case State.Select:
                     this.txtToolTip.Text = Dict("tip_state_select");
                     break;
+                case State.Line:
+                    this.txtToolTip.Text = Dict("tip_state_line");
+                    break;
                 default:
                     this.txtToolTip.Text = string.Empty;
                     break;
@@ -273,20 +296,26 @@ namespace GraphDigitizer.Views
                 }
             }
             else
-                SetCrossair(p);
+                SetCrosshair(p);
 
             if (this.state == State.Axes)
             {
-                if (this.axes.Status == 1)
+                switch(this.axes.Status)
                 {
-                    this.axes.Xaxis.X2 = p.X;
-                    this.axes.Xaxis.Y2 = p.Y;
+                    case 1:
+                        this.axes.Xaxis.X2 = p.X;
+                        this.axes.Xaxis.Y2 = p.Y;
+                        break;
+                    case 3:
+                        this.axes.Yaxis.X2 = p.X;
+                        this.axes.Yaxis.Y2 = p.Y;
+                        break;
                 }
-                else if (this.axes.Status == 3)
-                {
-                    this.axes.Yaxis.X2 = p.X;
-                    this.axes.Yaxis.Y2 = p.Y;
-                }
+            }
+            else if (this.state == State.Line && this.useLineTool)
+            {
+                this.LineTool.X2 = p.X;
+                this.LineTool.Y2 = p.Y;
             }
             Crossair.Hide(true);
             p.X *= 100.0 / this.prop;
@@ -331,7 +360,7 @@ namespace GraphDigitizer.Views
                 Crossair.SetHorizental(Math.Max(0, Canvas.GetLeft(this.imgZoom)), p2.Y, Math.Min(this.cnvZoom.ActualWidth, Canvas.GetLeft(this.imgZoom) + this.imgZoom.Width), p2.Y);
                 Crossair.SetVertical(p2.X, Math.Max(0, Canvas.GetTop(this.imgZoom)), p2.X, Math.Min(this.cnvZoom.ActualHeight, Canvas.GetTop(this.imgZoom) + this.imgZoom.Height));
                 Crossair.Hide(false);
-                Crossair.SetState(this.state == State.Axes ? this.axes.Status : 4);
+                Crossair.SetState(this.state, this.axes.Status);
                 CrossairL.Hide(true);
                 this.UpdateStatusCoords(p.X / this.zoom, p.Y / this.zoom);
             }
@@ -339,7 +368,7 @@ namespace GraphDigitizer.Views
 
         private void ZoomModeIn()
         {
-            Point prev; 
+            XYPoint prev; 
             Rect r;
             this.precisionMode = true;
             GetCursorPos(out prev);
@@ -405,24 +434,6 @@ namespace GraphDigitizer.Views
         {
             if ((e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) && this.precisionMode)
                 this.ZoomModeOut();
-        }
-
-        public void GetRealCoords(double X, double Y, out double RealX, out double RealY)
-        {
-            double Xaxis, Yaxis;
-            //First: obtain the equivalent point in the X axis and in the Y axis
-            Xaxis = -((this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.X * this.axes.Xmin.Y - this.axes.Xmax.Y * this.axes.Xmin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (X * (this.axes.Ymin.Y - this.axes.Ymax.Y) + Y * (this.axes.Ymax.X - this.axes.Ymin.X))) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
-            Yaxis = (Y * (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + (this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.Y * this.axes.Ymin.X - this.axes.Ymax.X * this.axes.Ymin.Y + X * (this.axes.Ymin.Y - this.axes.Ymax.Y))) / ((this.axes.Xmin.Y - this.axes.Xmax.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
-
-            if (this.axes.XLog)
-                RealX = Math.Pow(10.0, Math.Log10(this.axes.Xmin.Value) + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)));
-            else
-                RealX = this.axes.Xmin.Value + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Xmax.Value - this.axes.Xmin.Value);
-
-            if (this.axes.YLog)
-                RealY = Math.Pow(10.0, Math.Log10(this.axes.Ymin.Value) + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)));
-            else
-                RealY = this.axes.Ymin.Value + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (this.axes.Ymax.Value - this.axes.Ymin.Value);
         }
 
         private void AddPoint(double x, double y)
@@ -521,6 +532,10 @@ namespace GraphDigitizer.Views
             {
                 this.AddPoint(X, Y);
             }
+            else if (this.state == State.Line)
+            {
+                this.SetLineTool(X, Y);
+            }
             this.SetToolTip();
         }
 
@@ -580,7 +595,7 @@ namespace GraphDigitizer.Views
 
         private void imgGraph_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Point p = e.GetPosition(this.imgGraph);
+            Point p = e.GetPosition(this.imgGraph);
             if (e.ChangedButton == MouseButton.Right)
             {
                 this.dragMode = true;
@@ -611,6 +626,11 @@ namespace GraphDigitizer.Views
         }
 
         private void btnAxes_Click(object sender, RoutedEventArgs e)
+        {
+            Axes_Click();
+        }
+
+        private void Axes_Click()
         {
             this.state = State.Axes;
             this.axes.Status = 0;
@@ -645,6 +665,47 @@ namespace GraphDigitizer.Views
             ap.ShowDialog();
             this.axes = ap.Axes;
             PointsClicked();
+        }
+
+        private void SetLineTool(double x, double y)
+        {
+            double p = this.prop / 100.0;
+            if (this.useLineTool)
+            {
+                this.LineTool.X2 = x * p;
+                this.LineTool.Y2 = y * p;
+                this.SelectLineProp();
+            }
+            else
+            {
+                this.LineTool.Visibility = Visibility.Visible;
+                this.LineTool.X1 = x * p;
+                this.LineTool.Y1 = y * p;
+                this.LineTool.X2 = x * p;
+                this.LineTool.Y2 = y * p;
+                this.useLineTool = true;
+            }
+        }
+
+        private void SelectLineProp()
+        {
+            if (this.state != State.Line || !this.useLineTool) return;
+            if (this.precisionMode) this.ZoomModeOut(false);
+            var lp = new LineProp(this.linemodel);
+            lp.Owner = this;
+            if (lp.ShowDialog() == true)
+            {
+                double p = 100.0 / this.prop;
+                LinearModel lm = new LinearModel(LineTool.X1 * p, LineTool.Y1 * p, LineTool.X2 * p, LineTool.Y2 * p);
+                if (this.linemodel.ScreenOrReal)
+                    lm.Interp(this.linemodel.Count);
+                else
+                    lm.InterpInReal(this.linemodel.Count, this.linemodel.XOrY);
+                foreach (Vector v in lm.Points)
+                    this.AddPoint(v.X, v.Y);
+            }
+            this.useLineTool = false;
+            this.LineTool.Visibility = Visibility.Hidden;
         }
 
         private void DeletePoints()
@@ -829,6 +890,21 @@ namespace GraphDigitizer.Views
             this.cnvGraph.Cursor = Cursors.Cross;
         }
 
+        private void OnLineClicked(object sender, RoutedEventArgs e)
+        {
+            this.LineTool.Visibility = Visibility.Hidden;
+            this.useLineTool = false;
+            if (this.axes.Xaxis == null || this.axes.Yaxis == null)
+            {
+                MessageBox.Show(Dict("except_valid2"), "", MessageBoxButton.OK, MessageBoxImage.Information);
+                Axes_Click();
+                return;
+            }
+            this.state = State.Line;
+            this.SetToolTip();
+            this.cnvGraph.Cursor = Cursors.Cross;
+        }
+
         private void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             if (!this.sfd.ShowDialog().Value)
@@ -979,10 +1055,56 @@ namespace GraphDigitizer.Views
 
         private string Dict(string key)
         {
-            return (string)Application.Current.FindResource(key);
+            return Local.Dict(key);
         }
 
-        private struct Point
+        private Vector ScreenToRealCoords(Vector p)
+        {
+            GetRealCoords(p.X, p.Y, out double RealX, out double RealY);
+            return new Vector(RealX, RealY);
+        }
+
+        private Vector RealToScreenCoords(Vector p)
+        {
+            double Xaxis, Yaxis;
+            if (this.axes.XLog)
+                Xaxis = (Math.Log10(p.X) - Math.Log10(this.axes.Xmin.Value)) / (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)) * (this.axes.Xmax.X - this.axes.Xmin.X) + this.axes.Xmin.X;
+            else
+                Xaxis = (p.X - this.axes.Xmin.Value) / (this.axes.Xmax.Value - this.axes.Xmin.Value) * (this.axes.Xmax.X - this.axes.Xmin.X) + this.axes.Xmin.X;
+
+            if (this.axes.YLog)
+                Yaxis = (Math.Log10(p.Y) - Math.Log10(this.axes.Ymin.Value)) / (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
+            else
+                Yaxis = (p.Y - this.axes.Ymin.Value) / (this.axes.Ymax.Value - this.axes.Ymin.Value) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
+
+            double x0 = ((this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymin.Y * this.axes.Ymax.X - this.axes.Ymin.X * this.axes.Ymax.Y) + (this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.Y * this.axes.Xmin.X - this.axes.Xmax.X * this.axes.Xmin.Y)) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
+            double y0 = (this.axes.Xmax.Y - this.axes.Xmin.Y) * ((this.axes.Ymin.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmin.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y)) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y)) + this.axes.Xmin.Y;
+
+            double yb = (this.axes.Xmax.Y - this.axes.Xmin.Y) / (this.axes.Xmax.X - this.axes.Xmin.X) * (Xaxis - this.axes.Xmin.X) + this.axes.Xmin.Y;
+            double xb = (this.axes.Ymax.X - this.axes.Ymin.X) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (Yaxis - this.axes.Ymin.Y) + this.axes.Ymin.X;
+
+            return new Vector(Xaxis + xb - x0, Yaxis + yb - y0);
+        }
+
+        public void GetRealCoords(double X, double Y, out double RealX, out double RealY)
+        {
+            double Xaxis, Yaxis;
+            //First: obtain the equivalent point in the X axis and in the Y axis
+            Xaxis = -((this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.X * this.axes.Xmin.Y - this.axes.Xmax.Y * this.axes.Xmin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (X * (this.axes.Ymin.Y - this.axes.Ymax.Y) + Y * (this.axes.Ymax.X - this.axes.Ymin.X))) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
+            Yaxis = (Y * (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + (this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.Y * this.axes.Ymin.X - this.axes.Ymax.X * this.axes.Ymin.Y + X * (this.axes.Ymin.Y - this.axes.Ymax.Y))) / ((this.axes.Xmin.Y - this.axes.Xmax.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
+
+            if (this.axes.XLog)
+                RealX = Math.Pow(10.0, Math.Log10(this.axes.Xmin.Value) + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)));
+            else
+                RealX = this.axes.Xmin.Value + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Xmax.Value - this.axes.Xmin.Value);
+
+            if (this.axes.YLog)
+                RealY = Math.Pow(10.0, Math.Log10(this.axes.Ymin.Value) + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)));
+            else
+                RealY = this.axes.Ymin.Value + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (this.axes.Ymax.Value - this.axes.Ymin.Value);
+        }
+
+        private struct XYPoint
         {
             public int X, Y;
         }
@@ -1017,17 +1139,17 @@ namespace GraphDigitizer.Views
                 {
                     this.dragMode = false;
                     this.cnvGraph.Cursor = this.state == State.Select ? Cursors.Arrow : Cursors.Cross;
-                    SetCrossair(e.GetPosition(this.imgGraph));
+                    SetCrosshair(e.GetPosition(this.imgGraph));
                 }
             }
         }
 
-        private void SetCrossair(System.Windows.Point p)
+        private void SetCrosshair(Point p)
         {
             CrossairL.SetHorizental(0, p.Y, this.imgGraph.ActualWidth, p.Y);
             CrossairL.SetVertical(p.X, 0, p.X, this.imgGraph.ActualHeight);
             CrossairL.Hide(this.state == State.Select);
-            CrossairL.SetState(this.state == State.Axes ? this.axes.Status : 4);
+            CrossairL.SetState(this.state, this.axes.Status);
         }
 
         private struct Rect
@@ -1041,7 +1163,8 @@ namespace GraphDigitizer.Views
         Idle,
         Axes,
         Select,
-        Points
+        Points,
+        Line
     }
 
     public struct Coord

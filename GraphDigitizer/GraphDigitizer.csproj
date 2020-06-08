@@ -92,6 +92,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LineProp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\AxesProp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -108,9 +112,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converters\Converters.cs" />
     <Compile Include="Models\Axes.cs" />
     <Compile Include="Models\DataPoint.cs" />
+    <Compile Include="Models\LinearModel.cs" />
+    <Compile Include="Models\Models.cs" />
+    <Compile Include="Models\ValidationRules.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Util\Util.cs" />
+    <Compile Include="Views\LineProp.xaml.cs">
+      <DependentUpon>LineProp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AxesProp.xaml.cs">
       <DependentUpon>AxesProp.xaml</DependentUpon>
     </Compile>
@@ -221,6 +233,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Clipboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

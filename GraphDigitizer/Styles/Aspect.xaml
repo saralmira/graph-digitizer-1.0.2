@@ -276,4 +276,31 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <ControlTemplate x:Key="ValidationErrorObject">
+        <Border BorderThickness="1" CornerRadius="1" BorderBrush="Red">
+            <Grid>
+                <AdornedElementPlaceholder Name="customAdorner"/>
+                <Image Source="/Resources/error.png" Stretch="Uniform" Margin="0 0 5 0" Width="14" Height="14" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
+                <!--<TextBlock Text="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" Background="White" HorizontalAlignment="Right" Margin="0 0 5 0" Foreground="Red" VerticalAlignment="Center" IsHitTestVisible="False"/>-->
+            </Grid>
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="NewLabel" TargetType="Label">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Grid>
+                        <ContentPresenter x:Name="PART_ContentHost" Content="{TemplateBinding Content}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="#AEAEAE"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

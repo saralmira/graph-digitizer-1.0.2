@@ -9,6 +9,7 @@
     <sys:String x:Key="tip_setaxesprop">Set the properties of the axes</sys:String>
     <sys:String x:Key="tip_seltool">Selection tool (Hotkey: 1)</sys:String>
     <sys:String x:Key="tip_picktool">Pick point tool (Hotkey: 2)</sys:String>
+    <sys:String x:Key="tip_line">Draw a line in image</sys:String>
     <sys:String x:Key="tip_delallpoints">Delete all the selected points</sys:String>
     <sys:String x:Key="tip_zoomin">Increase the amount of zoom in the side image</sys:String>
     <sys:String x:Key="tip_zoomout">Decrease the amount of zoom in the side image</sys:String>
@@ -19,20 +20,32 @@
     <sys:String x:Key="tip_copypoints">Copy all the points to clipboard</sys:String>
 
     <sys:String x:Key="tip_axestitle">Properties of the axes</sys:String>
+    <sys:String x:Key="tip_linetitle">Specify points in line</sys:String>
+    <sys:String x:Key="tip_pointscount">Points count</sys:String>
+    <sys:String x:Key="tip_equalintev">Equal interval:</sys:String>
+    <sys:String x:Key="tip_ofscreen">Of screen</sys:String>
+    <sys:String x:Key="tip_ofreal">Of real</sys:String>
+    <sys:String x:Key="tip_intevaxis">Based on:</sys:String>
+    <sys:String x:Key="tip_xaxis">X axis</sys:String>
+    <sys:String x:Key="tip_yaxis">Y axis</sys:String>
     <sys:String x:Key="tip_logaxis">Logarithmic axis</sys:String>
     <sys:String x:Key="tip_help">Help</sys:String>
     <sys:String x:Key="tip_general">General</sys:String>
     <sys:String x:Key="tip_shortcuts">Key Shortcuts</sys:String>
     <sys:String x:Key="tip_about">About</sys:String>
-
     <sys:String x:Key="tip_screen">Screen:</sys:String>
     <sys:String x:Key="tip_real">Real:</sys:String>
     
     <sys:String x:Key="tip_state_idle">Load an image with the button above</sys:String>
-    <sys:String x:Key="tip_state_axes0">Select the minor X value of the axes</sys:String>
-    <sys:String x:Key="tip_state_axes1">Select the major X value of the axes</sys:String>
-    <sys:String x:Key="tip_state_axes2">Select the minor Y value of the axes</sys:String>
-    <sys:String x:Key="tip_state_axes3">Select the major Y value of the axes</sys:String>
+    <sys:String x:Key="tip_state_axes0">Select the minor X value of the axis</sys:String>
+    <sys:String x:Key="tip_state_axes1">Select the major X value of the axis</sys:String>
+    <sys:String x:Key="tip_state_axes2">Select the minor Y value of the axis</sys:String>
+    <sys:String x:Key="tip_state_axes3">Select the major Y value of the axis</sys:String>
     <sys:String x:Key="tip_state_points">Select any point you want to add to the data</sys:String>
+    <sys:String x:Key="tip_state_line">Select two points to draw a line</sys:String>
     <sys:String x:Key="tip_state_select">Click on any point to select it</sys:String>
+
+    <sys:String x:Key="except_valid1">Invalid number input</sys:String>
+    <sys:String x:Key="except_valid2">Axes are not set yet!</sys:String>
+    <sys:String x:Key="except_valid3">Value must be positive</sys:String>
 </ResourceDictionary>

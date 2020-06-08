@@ -9,6 +9,7 @@
     <sys:String x:Key="tip_setaxesprop">设置轴参数</sys:String>
     <sys:String x:Key="tip_seltool">选择工具 (快捷键: 1)</sys:String>
     <sys:String x:Key="tip_picktool">标点工具 (快捷键: 2)</sys:String>
+    <sys:String x:Key="tip_line">画线取点工具</sys:String>
     <sys:String x:Key="tip_delallpoints">删除所有点</sys:String>
     <sys:String x:Key="tip_zoomin">放大侧边图像</sys:String>
     <sys:String x:Key="tip_zoomout">缩小侧边图像</sys:String>
@@ -19,12 +20,19 @@
     <sys:String x:Key="tip_copypoints">复制所有点到剪贴板</sys:String>
     
     <sys:String x:Key="tip_axestitle">轴参数</sys:String>
+    <sys:String x:Key="tip_linetitle">直线采样</sys:String>
+    <sys:String x:Key="tip_pointscount">采样点数</sys:String>
+    <sys:String x:Key="tip_equalintev">等间隔采样:</sys:String>
+    <sys:String x:Key="tip_ofscreen">屏幕</sys:String>
+    <sys:String x:Key="tip_ofreal">实际</sys:String>
+    <sys:String x:Key="tip_intevaxis">采样基准:</sys:String>
+    <sys:String x:Key="tip_xaxis">x轴</sys:String>
+    <sys:String x:Key="tip_yaxis">y轴</sys:String>
     <sys:String x:Key="tip_logaxis">对数坐标</sys:String>
     <sys:String x:Key="tip_help">帮助</sys:String>
     <sys:String x:Key="tip_general">一般项</sys:String>
     <sys:String x:Key="tip_shortcuts">快捷键</sys:String>
     <sys:String x:Key="tip_about">关于</sys:String>
-    
     <sys:String x:Key="tip_screen">图像坐标：</sys:String>
     <sys:String x:Key="tip_real">实际坐标：</sys:String>
     
@@ -34,5 +42,10 @@
     <sys:String x:Key="tip_state_axes2">选择 y 轴最小值</sys:String>
     <sys:String x:Key="tip_state_axes3">选择 y 轴最大值</sys:String>
     <sys:String x:Key="tip_state_points">选择图中的数据点</sys:String>
+    <sys:String x:Key="tip_state_line">绘制直线以取点</sys:String>
     <sys:String x:Key="tip_state_select">点击任意一点以选择</sys:String>
+
+    <sys:String x:Key="except_valid1">数字输入不正确</sys:String>
+    <sys:String x:Key="except_valid2">还没有设置xy轴！</sys:String>
+    <sys:String x:Key="except_valid3">必须是正数</sys:String>
 </ResourceDictionary>
