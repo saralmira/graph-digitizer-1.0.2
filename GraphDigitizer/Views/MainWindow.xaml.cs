@@ -406,6 +406,9 @@ namespace GraphDigitizer.Views
 
             switch (e.Key)
             {
+                case Key.Delete:
+                    this.DeleteSelection(sender, e);
+                    break;
                 case Key.F1:
                     this.OnHelpClicked(sender, e);
                     break;
@@ -414,6 +417,9 @@ namespace GraphDigitizer.Views
                     break;
                 case Key.D2:
                     this.OnPointsClicked(sender, e);
+                    break;
+                case Key.D3:
+                    this.OnLineClicked(sender, e);
                     break;
             }
         }
@@ -570,16 +576,7 @@ namespace GraphDigitizer.Views
                 }
             }
             else if (e.ChangedButton == MouseButton.Right) //Delete mode
-            {
-                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
-                    this.DeleteSelection(sender, e);
-                else
-                {
-                    this.cnvGraph.Children.Remove((UIElement)sender);
-                    this.data.Remove((DataPoint)((Label)sender).Tag);
-                    this.UpdateData();
-                }
-            }
+                this.DeleteSelection(sender, e);
         }
 
         private void DeleteSelection(object sender, EventArgs e)
@@ -993,7 +990,7 @@ namespace GraphDigitizer.Views
 
         public BitmapImage ImageFromBuffer(Byte[] bytes)
         {
-            var stream = new System.IO.MemoryStream(bytes);
+            var stream = new MemoryStream(bytes);
             var image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = stream;
@@ -1003,7 +1000,7 @@ namespace GraphDigitizer.Views
 
         public Byte[] BufferFromImage(BitmapImage imageSource)
         {
-            var ms = new System.IO.MemoryStream();
+            var ms = new MemoryStream();
             var enc = new PngBitmapEncoder();
             enc.Frames.Add(BitmapFrame.Create(imageSource));
             enc.Save(ms);
@@ -1067,15 +1064,29 @@ namespace GraphDigitizer.Views
         private Vector RealToScreenCoords(Vector p)
         {
             double Xaxis, Yaxis;
-            if (this.axes.XLog)
-                Xaxis = (Math.Log10(p.X) - Math.Log10(this.axes.Xmin.Value)) / (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)) * (this.axes.Xmax.X - this.axes.Xmin.X) + this.axes.Xmin.X;
+            if (this.axes.Xmax.Value == this.axes.Xmin.Value)
+            {
+                Xaxis = this.axes.Xmin.X;
+            }
             else
-                Xaxis = (p.X - this.axes.Xmin.Value) / (this.axes.Xmax.Value - this.axes.Xmin.Value) * (this.axes.Xmax.X - this.axes.Xmin.X) + this.axes.Xmin.X;
-
-            if (this.axes.YLog)
-                Yaxis = (Math.Log10(p.Y) - Math.Log10(this.axes.Ymin.Value)) / (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
+            {
+                if (this.axes.XLog)
+                    Xaxis = (Math.Log10(p.X) - Math.Log10(this.axes.Xmin.Value)) / (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)) * (this.axes.Xmax.X - this.axes.Xmin.X) + this.axes.Xmin.X;
+                else
+                    Xaxis = (p.X - this.axes.Xmin.Value) / (this.axes.Xmax.Value - this.axes.Xmin.Value) * (this.axes.Xmax.X - this.axes.Xmin.X) + this.axes.Xmin.X;
+            }
+            
+            if (this.axes.Ymax.Value == this.axes.Ymin.Value)
+            {
+                Yaxis = this.axes.Ymin.Y;
+            }
             else
-                Yaxis = (p.Y - this.axes.Ymin.Value) / (this.axes.Ymax.Value - this.axes.Ymin.Value) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
+            {
+                if (this.axes.YLog)
+                    Yaxis = (Math.Log10(p.Y) - Math.Log10(this.axes.Ymin.Value)) / (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
+                else
+                    Yaxis = (p.Y - this.axes.Ymin.Value) / (this.axes.Ymax.Value - this.axes.Ymin.Value) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
+            }
 
             double x0 = ((this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymin.Y * this.axes.Ymax.X - this.axes.Ymin.X * this.axes.Ymax.Y) + (this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.Y * this.axes.Xmin.X - this.axes.Xmax.X * this.axes.Xmin.Y)) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
             double y0 = (this.axes.Xmax.Y - this.axes.Xmin.Y) * ((this.axes.Ymin.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmin.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y)) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y)) + this.axes.Xmin.Y;
@@ -1150,6 +1161,16 @@ namespace GraphDigitizer.Views
             CrossairL.SetVertical(p.X, 0, p.X, this.imgGraph.ActualHeight);
             CrossairL.Hide(this.state == State.Select);
             CrossairL.SetState(this.state, this.axes.Status);
+        }
+
+        private void DeleteCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = this.dgrPoints.SelectedItems.Count > 0;
+        }
+
+        private void DeleteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            DeleteSelection(sender, e);
         }
 
         private struct Rect

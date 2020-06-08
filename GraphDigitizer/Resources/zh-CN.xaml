@@ -9,7 +9,7 @@
     <sys:String x:Key="tip_setaxesprop">设置轴参数</sys:String>
     <sys:String x:Key="tip_seltool">选择工具 (快捷键: 1)</sys:String>
     <sys:String x:Key="tip_picktool">标点工具 (快捷键: 2)</sys:String>
-    <sys:String x:Key="tip_line">画线取点工具</sys:String>
+    <sys:String x:Key="tip_line">画线取点工具 (快捷键: 3)</sys:String>
     <sys:String x:Key="tip_delallpoints">删除所有点</sys:String>
     <sys:String x:Key="tip_zoomin">放大侧边图像</sys:String>
     <sys:String x:Key="tip_zoomout">缩小侧边图像</sys:String>

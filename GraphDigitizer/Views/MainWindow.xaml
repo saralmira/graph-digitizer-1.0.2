@@ -36,11 +36,20 @@
             </Border.Background>
         </Border>
         <DataGrid x:Name="dgrPoints" Grid.Row="1" Block.TextAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" ColumnWidth="95" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" FontSize="11" SelectionChanged="dgrPoints_SelectionChanged" IsReadOnly="True" Background="#FFE9EFF5" HeadersVisibility="Column" AutoGenerateColumns="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="#FF44587C" BorderThickness="0,0,0,1">
+            <DataGrid.Resources>
+                <RoutedUICommand x:Key="del" Text="Del"/>
+            </DataGrid.Resources>
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="{StaticResource del}"/>
+            </DataGrid.InputBindings>
+            <DataGrid.CommandBindings>
+                <CommandBinding x:Name="delCommand" Command="{StaticResource del}" CanExecute="DeleteCommand_CanExecute" Executed="DeleteCommand_Executed"/>
+            </DataGrid.CommandBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="ApplicationCommands.SelectAll" Header="Select All" />
-                    <MenuItem Command="ApplicationCommands.Copy" Header="Copy Points" />
-                    <MenuItem Header="Delete Selected" Click="DeleteSelection" />
+                    <MenuItem Command="ApplicationCommands.SelectAll" Header="Select All" HorizontalContentAlignment="Left"/>
+                    <MenuItem Command="ApplicationCommands.Copy" Header="Copy Points" HorizontalContentAlignment="Left"/>
+                    <MenuItem Command="{StaticResource del}" Header="Delete Selected" InputGestureText="Delete" HorizontalContentAlignment="Left"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
