@@ -18,6 +18,42 @@ namespace GraphDigitizer.Models
             Points = new List<Vector>();
         }
 
+        public LinearModel GetVertical(Vector p)
+        {
+            Vector arr = p2 - p1;
+            return new LinearModel(p, p + new Vector(arr.Y, -arr.X));
+        }
+
+        public LinearModel GetParallel(Vector p)
+        {
+            return new LinearModel(p, p + p2 - p1);
+        }
+
+        public Vector GetPointAtX(double x)
+        {
+            return (x - p1.X) / (p2.X - p1.X) * (p2 - p1) + p1;
+        }
+
+        public Vector GetPointAtY(double y)
+        {
+            return (y - p1.Y) / (p2.Y - p1.Y) * (p2 - p1) + p1;
+        }
+
+        /// <summary>
+        /// Compute the point which two lines intersect at.
+        /// </summary>
+        /// <param name="lm">The other line.</param>
+        /// <returns></returns>
+        public Vector GetIntersectionWith(LinearModel lm)
+        {
+            double delta = (p2.Y - p1.Y) * (lm.p2.X - lm.p1.X) - (lm.p2.Y - lm.p1.Y) * (p2.X - p1.X);
+            if (delta == 0)
+                return new Vector(double.NaN, double.NaN);
+
+            return new Vector(((lm.p1.Y - p1.Y) * (lm.p2.X - lm.p1.X) * (p2.X - p1.X) + p1.X * (p2.Y - p1.Y) * (lm.p2.X - lm.p1.X) - lm.p1.X * (lm.p2.Y - lm.p1.Y) * (p2.X - p1.X)) / delta,
+                -((lm.p1.X - p1.X) * (lm.p2.Y - lm.p1.Y) * (p2.Y - p1.Y) + p1.Y * (p2.X - p1.X) * (lm.p2.Y - lm.p1.Y) - lm.p1.Y * (lm.p2.X - lm.p1.X) * (p2.Y - p1.Y)) / delta);
+        }
+
         public void Interp(UInt32 count)
         {
             Points.Clear();
@@ -47,9 +83,9 @@ namespace GraphDigitizer.Models
                 if (count == 1)
                 {
                     if (xaxis)
-                        Points.Add(p1 + line * ((Util.RealToScreen((rp1 + rp2) / 2).X - p1.X) / (p2.X - p1.X)));
+                        Points.Add(p2.X == p1.X ? p1 : (p1 + line * ((Util.RealToScreen((rp1 + rp2) / 2).X - p1.X) / (p2.X - p1.X))));
                     else
-                        Points.Add(p1 + line * ((Util.RealToScreen((rp1 + rp2) / 2).Y - p1.Y) / (p2.Y - p1.Y)));
+                        Points.Add(p2.Y == p1.Y ? p1 : (p1 + line * ((Util.RealToScreen((rp1 + rp2) / 2).Y - p1.Y) / (p2.Y - p1.Y))));
                 }
                 else
                 {
@@ -57,9 +93,9 @@ namespace GraphDigitizer.Models
                     for (int i = 0; i < count; ++i)
                     {
                         if (xaxis)
-                            Points.Add(p1 + line * ((Util.RealToScreen(rp1 + i * gap).X - p1.X) / (p2.X - p1.X)));
+                            Points.Add(p2.X == p1.X ? p1 : (p1 + line * ((Util.RealToScreen(rp1 + i * gap).X - p1.X) / (p2.X - p1.X))));
                         else
-                            Points.Add(p1 + line * ((Util.RealToScreen(rp1 + i * gap).Y - p1.Y) / (p2.Y - p1.Y)));
+                            Points.Add(p2.Y == p1.Y ? p1 : (p1 + line * ((Util.RealToScreen(rp1 + i * gap).Y - p1.Y) / (p2.Y - p1.Y))));
                     }
                 }
             }

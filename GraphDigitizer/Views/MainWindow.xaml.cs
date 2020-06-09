@@ -1088,31 +1088,84 @@ namespace GraphDigitizer.Views
                     Yaxis = (p.Y - this.axes.Ymin.Value) / (this.axes.Ymax.Value - this.axes.Ymin.Value) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + this.axes.Ymin.Y;
             }
 
-            double x0 = ((this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymin.Y * this.axes.Ymax.X - this.axes.Ymin.X * this.axes.Ymax.Y) + (this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.Y * this.axes.Xmin.X - this.axes.Xmax.X * this.axes.Xmin.Y)) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
-            double y0 = (this.axes.Xmax.Y - this.axes.Xmin.Y) * ((this.axes.Ymin.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmin.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y)) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y)) + this.axes.Xmin.Y;
-
-            double yb = (this.axes.Xmax.Y - this.axes.Xmin.Y) / (this.axes.Xmax.X - this.axes.Xmin.X) * (Xaxis - this.axes.Xmin.X) + this.axes.Xmin.Y;
-            double xb = (this.axes.Ymax.X - this.axes.Ymin.X) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (Yaxis - this.axes.Ymin.Y) + this.axes.Ymin.X;
-
-            return new Vector(Xaxis + xb - x0, Yaxis + yb - y0);
+            if (this.axes.Xmin.Y == this.axes.Xmax.Y && this.axes.Xmax.X == this.axes.Xmin.X && this.axes.Ymax.X == this.axes.Ymin.X && this.axes.Ymax.Y == this.axes.Ymin.Y)
+                return new Vector(Xaxis, Yaxis);
+            else if (this.axes.Xmin.Y == this.axes.Xmax.Y && this.axes.Xmax.X == this.axes.Xmin.X)
+            {
+                LinearModel l1 = new LinearModel(this.axes.Ymin.X, this.axes.Ymin.Y, this.axes.Ymax.X, this.axes.Ymax.Y);
+                LinearModel l2 = l1.GetVertical(l1.GetPointAtY(Yaxis));
+                LinearModel l3 = l1.GetParallel(new Vector(this.axes.Xmin.X, this.axes.Xmin.Y));
+                return l2.GetIntersectionWith(l3);
+            }
+            else if (this.axes.Ymax.Y == this.axes.Ymin.Y && this.axes.Ymax.X == this.axes.Ymin.X)
+            {
+                LinearModel l1 = new LinearModel(this.axes.Xmin.X, this.axes.Xmin.Y, this.axes.Xmax.X, this.axes.Xmax.Y);
+                LinearModel l2 = l1.GetVertical(l1.GetPointAtX(Xaxis));
+                LinearModel l3 = l1.GetParallel(new Vector(this.axes.Ymin.X, this.axes.Ymin.Y));
+                return l2.GetIntersectionWith(l3);
+            }
+            else
+            {
+                LinearModel l1 = new LinearModel(this.axes.Ymin.X, this.axes.Ymin.Y, this.axes.Ymax.X, this.axes.Ymax.Y);
+                LinearModel l2 = new LinearModel(this.axes.Xmin.X, this.axes.Xmin.Y, this.axes.Xmax.X, this.axes.Xmax.Y);
+                LinearModel l3 = l1.GetVertical(l1.GetPointAtY(Yaxis));
+                LinearModel l4 = l2.GetVertical(l2.GetPointAtX(Xaxis));
+                return l3.GetIntersectionWith(l4);
+            }
         }
 
         public void GetRealCoords(double X, double Y, out double RealX, out double RealY)
         {
             double Xaxis, Yaxis;
+            double delta = (this.axes.Xmin.Y - this.axes.Xmax.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y);
             //First: obtain the equivalent point in the X axis and in the Y axis
-            Xaxis = -((this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.X * this.axes.Xmin.Y - this.axes.Xmax.Y * this.axes.Xmin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (X * (this.axes.Ymin.Y - this.axes.Ymax.Y) + Y * (this.axes.Ymax.X - this.axes.Ymin.X))) / ((this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
-            Yaxis = (Y * (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + (this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.Y * this.axes.Ymin.X - this.axes.Ymax.X * this.axes.Ymin.Y + X * (this.axes.Ymin.Y - this.axes.Ymax.Y))) / ((this.axes.Xmin.Y - this.axes.Xmax.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) + (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y));
-
-            if (this.axes.XLog)
-                RealX = Math.Pow(10.0, Math.Log10(this.axes.Xmin.Value) + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)));
+            if (delta == 0)
+            {
+                if (this.axes.Xmin.Y == this.axes.Xmax.Y && this.axes.Xmax.X == this.axes.Xmin.X && this.axes.Ymax.X == this.axes.Ymin.X && this.axes.Ymax.Y == this.axes.Ymin.Y)
+                {
+                    Xaxis = this.axes.Xmin.X;
+                    Yaxis = this.axes.Ymin.Y;
+                }
+                else if (this.axes.Xmin.Y == this.axes.Xmax.Y && this.axes.Xmax.X == this.axes.Xmin.X)
+                {
+                    Xaxis = this.axes.Xmin.X;
+                    Yaxis = ((Y - this.axes.Ymin.Y) * (this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + X * Math.Pow(this.axes.Ymax.X - this.axes.Ymin.X, 2) + this.axes.Ymin.X * Math.Pow(this.axes.Ymax.Y - this.axes.Ymin.Y, 2)) / (Math.Pow(this.axes.Ymax.Y - this.axes.Ymin.Y, 2) + Math.Pow(this.axes.Ymax.X - this.axes.Ymin.X, 2));
+                }
+                else
+                {
+                    Xaxis = ((Y - this.axes.Xmin.Y) * (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Xmax.Y - this.axes.Xmin.Y) + X * Math.Pow(this.axes.Xmax.X - this.axes.Xmin.X, 2) + this.axes.Xmin.X * Math.Pow(this.axes.Xmax.Y - this.axes.Xmin.Y, 2)) / (Math.Pow(this.axes.Xmax.Y - this.axes.Xmin.Y, 2) + Math.Pow(this.axes.Xmax.X - this.axes.Xmin.X, 2));
+                    Yaxis = this.axes.Ymin.Y;
+                }
+            }
             else
-                RealX = this.axes.Xmin.Value + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Xmax.Value - this.axes.Xmin.Value);
+            {
+                Xaxis = ((this.axes.Ymax.X - this.axes.Ymin.X) * (this.axes.Xmax.X * this.axes.Xmin.Y - this.axes.Xmax.Y * this.axes.Xmin.X) - (this.axes.Xmax.X - this.axes.Xmin.X) * (X * (this.axes.Ymin.Y - this.axes.Ymax.Y) + Y * (this.axes.Ymax.X - this.axes.Ymin.X))) / delta;
+                Yaxis = (Y * (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Ymax.Y - this.axes.Ymin.Y) + (this.axes.Xmax.Y - this.axes.Xmin.Y) * (this.axes.Ymax.Y * this.axes.Ymin.X - this.axes.Ymax.X * this.axes.Ymin.Y + X * (this.axes.Ymin.Y - this.axes.Ymax.Y))) / delta;
+            }
 
-            if (this.axes.YLog)
-                RealY = Math.Pow(10.0, Math.Log10(this.axes.Ymin.Value) + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)));
+            if (this.axes.Xmax.X == this.axes.Xmin.X)
+            {
+                RealX = this.axes.Xmin.Value;
+            }
             else
-                RealY = this.axes.Ymin.Value + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (this.axes.Ymax.Value - this.axes.Ymin.Value);
+            {
+                if (this.axes.XLog)
+                    RealX = Math.Pow(10.0, Math.Log10(this.axes.Xmin.Value) + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (Math.Log10(this.axes.Xmax.Value) - Math.Log10(this.axes.Xmin.Value)));
+                else
+                    RealX = this.axes.Xmin.Value + (Xaxis - this.axes.Xmin.X) / (this.axes.Xmax.X - this.axes.Xmin.X) * (this.axes.Xmax.Value - this.axes.Xmin.Value);
+            }
+
+            if (this.axes.Ymax.Y == this.axes.Ymin.Y)
+            {
+                RealY = this.axes.Ymin.Value;
+            }
+            else
+            {
+                if (this.axes.YLog)
+                    RealY = Math.Pow(10.0, Math.Log10(this.axes.Ymin.Value) + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (Math.Log10(this.axes.Ymax.Value) - Math.Log10(this.axes.Ymin.Value)));
+                else
+                    RealY = this.axes.Ymin.Value + (Yaxis - this.axes.Ymin.Y) / (this.axes.Ymax.Y - this.axes.Ymin.Y) * (this.axes.Ymax.Value - this.axes.Ymin.Value);
+            }
         }
 
         private struct XYPoint
