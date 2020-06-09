@@ -1108,8 +1108,8 @@ namespace GraphDigitizer.Views
             {
                 LinearModel l1 = new LinearModel(this.axes.Ymin.X, this.axes.Ymin.Y, this.axes.Ymax.X, this.axes.Ymax.Y);
                 LinearModel l2 = new LinearModel(this.axes.Xmin.X, this.axes.Xmin.Y, this.axes.Xmax.X, this.axes.Xmax.Y);
-                LinearModel l3 = l1.GetVertical(l1.GetPointAtY(Yaxis));
-                LinearModel l4 = l2.GetVertical(l2.GetPointAtX(Xaxis));
+                LinearModel l3 = l2.GetParallel(l1.GetPointAtY(Yaxis));
+                LinearModel l4 = l1.GetParallel(l2.GetPointAtX(Xaxis));
                 return l3.GetIntersectionWith(l4);
             }
         }
