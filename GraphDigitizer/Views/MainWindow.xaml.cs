@@ -63,8 +63,12 @@ namespace GraphDigitizer.Views
         private string imagepath = null;
 
         //Zoom properties, prop in percentage
-        private double zoom = 2, prop = 100; 
-        
+        private double zoom = 2, prop = 100;
+        const double MinZoom = 1;
+        const double MaxZoom = 16;
+        const double MinZoomMain = 10;
+        const double MaxZoomMain = 1000;
+
         //Selection rectangle
         private bool selecting = false; //Selection rectangle off
         private Point selFirstPos; //First rectangle corner
@@ -97,7 +101,7 @@ namespace GraphDigitizer.Views
             this.axes.Xmax.Value = 1.0;
             this.axes.Ymin.Value = 0.0;
             this.axes.Ymax.Value = 1.0;
-            this.zoom = Properties.Settings.Default.Zoom;
+            this.zoom = MinMax(Properties.Settings.Default.Zoom, MinZoom, MaxZoom);
             this.cnvGraph.Children.Add(CrossairL.X);
             this.cnvGraph.Children.Add(CrossairL.Y);
             this.cnvGraph.Children.Add(LineTool);
@@ -120,7 +124,7 @@ namespace GraphDigitizer.Views
                 catch { }
             }
 
-            this.UpdateProportions((double)Properties.Settings.Default.Proportion);
+            this.UpdateProportions(MinMax(Properties.Settings.Default.Proportion, MinZoomMain, MaxZoomMain));
 
             svwGraph.ScrollToHorizontalOffset(Properties.Settings.Default.HorizontalOffset);
             svwGraph.ScrollToVerticalOffset(Properties.Settings.Default.VerticalOffset);
@@ -712,14 +716,14 @@ namespace GraphDigitizer.Views
 
         private void OnZoomInClicked(object sender, RoutedEventArgs e)
         {
-            if (this.zoom < 16) this.zoom *= 2;
+            if (this.zoom < MaxZoom) this.zoom *= 2; else this.zoom = MaxZoom;
             this.imgZoom.Width = ((BitmapSource)this.imgZoom.Source).PixelWidth * this.zoom;
             this.imgZoom.Height = ((BitmapSource)this.imgZoom.Source).PixelHeight * this.zoom;
         }
 
         private void OnZoomOutClicked(object sender, RoutedEventArgs e)
         {
-            if (this.zoom > 1) this.zoom /= 2;
+            if (this.zoom > MinZoom) this.zoom /= 2; else this.zoom = MinZoom;
             this.imgZoom.Width = ((BitmapSource)this.imgZoom.Source).PixelWidth * this.zoom;
             this.imgZoom.Height = ((BitmapSource)this.imgZoom.Source).PixelHeight * this.zoom;
         }
@@ -731,10 +735,10 @@ namespace GraphDigitizer.Views
 
         private void UpdateProportions(double newprop, Point p)
         {
-            if (newprop < 10)
-                newprop = 10;
-            else if (newprop > 1000)
-                newprop = 1000;
+            if (newprop < MinZoomMain)
+                newprop = MinZoomMain;
+            else if (newprop > MaxZoomMain)
+                newprop = MaxZoomMain;
 
             newprop /= this.prop;
 
@@ -1059,8 +1063,8 @@ namespace GraphDigitizer.Views
                         bmp = new BitmapImage(new Uri(imagepath));
                     }
                 }
-                this.prop = br.ReadDouble();
-                this.zoom = br.ReadDouble();
+                this.prop = MinMax(br.ReadDouble(), MinZoomMain, MaxZoomMain);
+                this.zoom = MinMax(br.ReadDouble(), MinZoom, MaxZoom);
 
                 if (bmp != null)
                 {
@@ -1343,6 +1347,11 @@ namespace GraphDigitizer.Views
         private void DeleteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             DeleteSelection(sender, e);
+        }
+
+        private double MinMax(double value, double min, double max)
+        {
+            return value <= min ? min : (value > max ? max : value);
         }
 
         private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
