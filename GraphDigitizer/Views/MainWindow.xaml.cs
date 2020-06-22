@@ -403,6 +403,9 @@ namespace GraphDigitizer.Views
                 case Key.D3:
                     this.OnLineClicked(sender, e);
                     break;
+                case Key.D4:
+                    this.OnFunctionClicked(sender, e);
+                    break;
             }
         }
 
