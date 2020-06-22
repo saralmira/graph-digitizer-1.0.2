@@ -50,4 +50,19 @@ namespace GraphDigitizer.Models
             return new ValidationResult(false, Local.Dict("except_valid3"));
         }
     }
+
+    public class XParserValidationRule : ValidationRule
+    {
+        private static readonly ValidationResult DefResult = new ValidationResult(true, null);
+        private static readonly XParser xParser = new XParser();
+
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            xParser.ParseDataList((string)value);
+            if (xParser.LastException != null)
+                return new ValidationResult(false, xParser.LastException.Message);
+            else
+                return DefResult;
+        }
+    }
 }

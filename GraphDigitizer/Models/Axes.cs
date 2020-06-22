@@ -15,10 +15,10 @@ namespace GraphDigitizer.Models
 
     public class Crosshair
     {
-        readonly Brush red = new SolidColorBrush(Color.FromArgb(0x90, 0xFF, 0x21, 0x21));
-        readonly Brush blue = new SolidColorBrush(Color.FromArgb(0x90, 0x21, 0x21, 0xFF));
-        readonly Brush green = new SolidColorBrush(Color.FromArgb(0x90, 0x21, 0xFF, 0x21));
-        readonly Brush point = new SolidColorBrush(Color.FromArgb(0x90, 0xFC, 0x8A, 0x45));
+        readonly Brush red = new SolidColorBrush(Color.FromArgb(0x90, 0xFF, 0x00, 0x00));
+        readonly Brush blue = new SolidColorBrush(Color.FromArgb(0x90, 0x00, 0x00, 0xFF));
+        readonly Brush green = new SolidColorBrush(Color.FromArgb(0x90, 0x00, 0xFF, 0x00));
+        readonly Brush point = new SolidColorBrush(Color.FromArgb(0x90, 0xFF, 0x88, 0x00));
 
         public Crosshair()
         {
@@ -39,18 +39,18 @@ namespace GraphDigitizer.Models
             Hide(true);
         }
 
-        public void SetHorizental(double x1, double y1, double x2, double y2)
+        public void SetHorizental(double x1, double x2, double y)
         {
             X.X1 = x1;
             X.X2 = x2;
-            X.Y1 = y1;
-            X.Y2 = y2;
+            X.Y1 = y;
+            X.Y2 = X.Y1;
         }
 
-        public void SetVertical(double x1, double y1, double x2, double y2)
+        public void SetVertical(double x, double y1, double y2)
         {
-            Y.X1 = x1;
-            Y.X2 = x2;
+            Y.X1 = x;
+            Y.X2 = Y.X1;
             Y.Y1 = y1;
             Y.Y2 = y2;
         }

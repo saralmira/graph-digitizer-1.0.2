@@ -11,6 +11,24 @@ namespace GraphDigitizer.Views
     /// </summary>
     public partial class AxesProp : Window
     {
+        public static AxesProp gAxesProp;
+        public static bool IsClosed = true;
+
+        public static void Show(Window owner, Axes axes)
+        {
+            if (!IsClosed)
+            {
+                if (gAxesProp != null)
+                    gAxesProp.Focus();
+            }
+            else
+            {
+                gAxesProp = new AxesProp(axes);
+                gAxesProp.Owner = owner;
+                gAxesProp.Show();
+            }
+        }
+
         public Axes Axes { get; }
 
         public AxesProp(Axes ax)
@@ -23,6 +41,7 @@ namespace GraphDigitizer.Views
             this.YMinBox.Text = this.Axes.Ymin.Value.ToString(CultureInfo.InvariantCulture);
             this.YMaxBox.Text = this.Axes.Ymax.Value.ToString(CultureInfo.InvariantCulture);
             this.YLogBox.IsChecked = this.Axes.YLog;
+            IsClosed = false;
         }
 
         private void OnAcceptClick(object sender, RoutedEventArgs e)
@@ -60,6 +79,11 @@ namespace GraphDigitizer.Views
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             this.XMinBox.Focus();
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            IsClosed = true;
         }
     }
 }

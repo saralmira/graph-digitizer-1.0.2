@@ -39,7 +39,7 @@
                 </TextBox.Text>
             </TextBox>
         </Grid>
-        <Grid Grid.Row="1" Margin="5 0 5 0">
+        <Grid Grid.Row="1" Margin="5 3 5 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
@@ -47,21 +47,14 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="{DynamicResource tip_equalintev}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <CheckBox x:Name="cb" Grid.Column="1" Margin="10 0 5 0" IsChecked="{Binding ScreenOrReal,Mode=TwoWay}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-            <Label Grid.Column="2" Style="{StaticResource NewLabel}" Content="{DynamicResource tip_ofscreen}" IsEnabled="{Binding ElementName=cb,Path=IsChecked,Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="3" Text=" / " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Label Grid.Column="4" Style="{StaticResource NewLabel}" Margin="0 0 20 0" Content="{DynamicResource tip_ofreal}" IsEnabled="{Binding ElementName=cb,Path=IsChecked,Mode=OneWay,Converter={StaticResource BoolReverseConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
+            <RadioButton Grid.Column="1" Margin="10 0 5 0" Content="{DynamicResource tip_ofscreen}" IsChecked="{Binding ScreenOrReal,Mode=TwoWay}" VerticalAlignment="Center" VerticalContentAlignment="Center" GroupName="rbg1"/>
+            <RadioButton x:Name="cb" Grid.Column="2 " Margin="10 0 5 0" Content="{DynamicResource tip_ofreal}" IsChecked="{Binding ScreenOrReal,Mode=TwoWay,Converter={StaticResource BoolReverseConverter}}" VerticalAlignment="Center" VerticalContentAlignment="Center" GroupName="rbg1"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource tip_intevaxis}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <CheckBox Grid.Row="1" x:Name="cb2" Grid.Column="1" Margin="10 0 5 0" IsChecked="{Binding XOrY,Mode=TwoWay}" IsEnabled="{Binding ElementName=cb,Path=IsChecked,Mode=OneWay,Converter={StaticResource BoolReverseConverter}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-            <Label Grid.Row="1" Style="{StaticResource NewLabel}" Grid.Column="2" Content="{DynamicResource tip_xaxis}" IsEnabled="{Binding ElementName=cb2,Path=IsChecked,Mode=OneWay}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="1" Grid.Column="3" Text=" / " HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Label Grid.Row="1" Style="{StaticResource NewLabel}" Grid.Column="4" Content="{DynamicResource tip_yaxis}" IsEnabled="{Binding ElementName=cb2,Path=IsChecked,Mode=OneWay,Converter={StaticResource BoolReverseConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <RadioButton Grid.Row="1" Grid.Column="1" Margin="10 0 5 0" Content="{DynamicResource tip_xaxis}" IsChecked="{Binding XOrY,Mode=TwoWay}" IsEnabled="{Binding ElementName=cb,Path=IsChecked,Mode=OneWay}" VerticalAlignment="Center" VerticalContentAlignment="Center" GroupName="rbg2"/>
+            <RadioButton Grid.Row="1" Grid.Column="2 " Margin="10 0 5 0" Content="{DynamicResource tip_yaxis}" IsChecked="{Binding XOrY,Mode=TwoWay,Converter={StaticResource BoolReverseConverter}}" IsEnabled="{Binding ElementName=cb,Path=IsChecked,Mode=OneWay}" VerticalAlignment="Center" VerticalContentAlignment="Center" GroupName="rbg2"/>
         </Grid>
         <TextBlock x:Name="tb" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Red"/>
         <Button Content="OK"

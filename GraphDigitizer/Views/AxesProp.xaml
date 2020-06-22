@@ -14,7 +14,7 @@
         WindowStyle="ToolWindow"
         Topmost="False"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Background="#FFE8EBEB" WindowStartupLocation="CenterOwner">
+        Background="#FFE8EBEB" WindowStartupLocation="CenterOwner" Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="6" />

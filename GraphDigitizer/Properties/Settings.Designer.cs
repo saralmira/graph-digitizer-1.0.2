@@ -58,5 +58,29 @@ namespace GraphDigitizer.Properties {
                 this["Proportion"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double HorizontalOffset {
+            get {
+                return ((double)(this["HorizontalOffset"]));
+            }
+            set {
+                this["HorizontalOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double VerticalOffset {
+            get {
+                return ((double)(this["VerticalOffset"]));
+            }
+            set {
+                this["VerticalOffset"] = value;
+            }
+        }
     }
 }

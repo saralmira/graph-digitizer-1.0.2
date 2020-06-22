@@ -10,6 +10,7 @@
     <sys:String x:Key="tip_seltool">选择工具 (快捷键: 1)</sys:String>
     <sys:String x:Key="tip_picktool">标点工具 (快捷键: 2)</sys:String>
     <sys:String x:Key="tip_line">画线取点工具 (快捷键: 3)</sys:String>
+    <sys:String x:Key="tip_func">函数取点工具 (快捷键: 4)</sys:String>
     <sys:String x:Key="tip_delallpoints">删除所有点</sys:String>
     <sys:String x:Key="tip_zoomin">放大侧边图像</sys:String>
     <sys:String x:Key="tip_zoomout">缩小侧边图像</sys:String>
@@ -21,6 +22,7 @@
     
     <sys:String x:Key="tip_axestitle">轴参数</sys:String>
     <sys:String x:Key="tip_linetitle">直线采样</sys:String>
+    <sys:String x:Key="tip_functitle">函数工具</sys:String>
     <sys:String x:Key="tip_pointscount">采样点数</sys:String>
     <sys:String x:Key="tip_equalintev">等间隔采样:</sys:String>
     <sys:String x:Key="tip_ofscreen">屏幕</sys:String>
@@ -35,7 +37,11 @@
     <sys:String x:Key="tip_about">关于</sys:String>
     <sys:String x:Key="tip_screen">图像坐标：</sys:String>
     <sys:String x:Key="tip_real">实际坐标：</sys:String>
-    
+    <sys:String x:Key="tip_functionlist">函数列表</sys:String>
+    <sys:String x:Key="tip_operatorlist">运算符列表</sys:String>
+    <sys:String x:Key="tip_variablelist">变量列表</sys:String>
+    <sys:String x:Key="tip_xexpressiontip" xml:space="preserve">用法1：x1&#13;&#10;用法2：x1,x2,x3&#13;&#10;用法3：xmin:xmax&#13;&#10;用法4：xmin:dx:xmax&#13;&#10;用法5：x1,xmin:dx:xmax,x3,x4</sys:String>
+
     <sys:String x:Key="tip_state_idle">请选择或拖入图片</sys:String>
     <sys:String x:Key="tip_state_axes0">选择 x 轴最小值</sys:String>
     <sys:String x:Key="tip_state_axes1">选择 x 轴最大值</sys:String>
@@ -45,7 +51,27 @@
     <sys:String x:Key="tip_state_line">绘制直线以取点</sys:String>
     <sys:String x:Key="tip_state_select">点击任意一点以选择</sys:String>
 
-    <sys:String x:Key="except_valid1">数字输入不正确</sys:String>
+    <sys:String x:Key="except_valid0">不能为空！</sys:String>
+    <sys:String x:Key="except_valid1">不正确的输入！</sys:String>
     <sys:String x:Key="except_valid2">还没有设置xy轴！</sys:String>
     <sys:String x:Key="except_valid3">必须是正数</sys:String>
+    <sys:String x:Key="except_valid4">表达式中有错误！</sys:String>
+    
+    <!-- LoreSoft.MathExpressions -->
+    <sys:String x:Key="EvaluatePropertyCanNotBeNull">表达式为空。</sys:String>
+    <sys:String x:Key="FunctionNameRegistered">函数名 '{0}' 已经注册。</sys:String>
+    <sys:String x:Key="InvalidCharacterEncountered">无效字符：</sys:String>
+    <sys:String x:Key="InvalidConvertionExpression">无效的转换表达式：</sys:String>
+    <sys:String x:Key="InvalidFunctionName">无效函数名：'{0}'。</sys:String>
+    <sys:String x:Key="InvalidLengthOfArray">数组长度无效。</sys:String>
+    <sys:String x:Key="InvalidMathExpression">无效的数学表达式。</sys:String>
+    <sys:String x:Key="InvalidNumberFormat">无效的数字格式：</sys:String>
+    <sys:String x:Key="InvalidOperator">无效的运算符：</sys:String>
+    <sys:String x:Key="InvalidSymbolOnStack">栈中存在无效的符号：</sys:String>
+    <sys:String x:Key="InvalidVariableEncountered">无效的函数或变量：</sys:String>
+    <sys:String x:Key="NotEnoughNumbers">表达式计算所需的参数错误，在：</sys:String>
+    <sys:String x:Key="UnbalancedParentheses">括号缺少或多出。</sys:String>
+    <sys:String x:Key="VariableNameConflict">变量名 '{0}' 与函数名冲突。</sys:String>
+    <sys:String x:Key="VariableNameContainsLetters">变量名只能由字母组成。</sys:String>
+    
 </ResourceDictionary>

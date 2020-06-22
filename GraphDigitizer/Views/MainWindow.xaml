@@ -10,9 +10,9 @@
         PreviewKeyDown="OnWindowPreviewKeyDown" 
         Icon="pack://application:,,,/Resources/graph.ico" 
         WindowStartupLocation="CenterScreen"
-        Closed="OnWindowClosed" 
-        PreviewMouseUp="OnWindowPreviewMouseUp" 
-        Background="#FFC6D3D6">
+        Closing="OnWindowClosing"
+        PreviewMouseUp="OnWindowPreviewMouseUp"
+        Background="{StaticResource dgrHeaderBackground}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="26" />
@@ -26,16 +26,8 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="303*" />
         </Grid.ColumnDefinitions>
-        <Border Height="26" x:Name="brdToolBar" VerticalAlignment="Top" Grid.ColumnSpan="3" BorderBrush="#FF555555" BorderThickness="0,0,0,1">
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFD4DFE2" Offset="0" />
-                    <GradientStop Color="#FFA7B7B9" Offset="0.651" />
-                    <GradientStop Color="#FFD4DFE2" Offset="0.314" />
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-        <DataGrid x:Name="dgrPoints" Grid.Row="1" Block.TextAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" ColumnWidth="95" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" FontSize="11" SelectionChanged="dgrPoints_SelectionChanged" IsReadOnly="True" Background="#FFE9EFF5" HeadersVisibility="Column" AutoGenerateColumns="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderBrush="#FF44587C" BorderThickness="0,0,0,1">
+        <Border Height="26" x:Name="brdToolBar" VerticalAlignment="Top" Grid.ColumnSpan="3" BorderBrush="#FF808080" BorderThickness="0,0,0,1"/>
+        <DataGrid x:Name="dgrPoints" Grid.Row="1" Block.TextAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" FontSize="12" ColumnWidth="95" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" SelectionChanged="dgrPoints_SelectionChanged" IsReadOnly="True" HeadersVisibility="Column" AutoGenerateColumns="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0,0,0,1" Background="{StaticResource dgrHeaderBackground}" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="Transparent" HorizontalAlignment="Stretch">
             <DataGrid.Resources>
                 <RoutedUICommand x:Key="del" Text="Del"/>
             </DataGrid.Resources>
@@ -59,8 +51,8 @@
         </DataGrid>
         <StatusBar x:Name="stbMain" Grid.Row="4" ClipToBounds="False" Background="{StaticResource dgrHeaderBackground}" Grid.ColumnSpan="3" BorderBrush="#FF555555" BorderThickness="0,1,0,0"/>
         <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3">
-            <ScrollViewer x:Name="svwGraph" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Focusable="False" AllowDrop="True" DragDrop.DragEnter="File_DragEnter" DragDrop.Drop="File_Drop" PanningMode="Both">
-                <Canvas Height="100" x:Name="cnvGraph" Width="200" ClipToBounds="True" MouseMove="imgGraph_MouseMove" MouseDown="imgGraph_MouseDown" MouseUp="cnvGraph_MouseUp" Cursor="Cross" UseLayoutRounding="True" MouseWheel="cnvGraph_MouseWheel">
+            <ScrollViewer x:Name="svwGraph" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Focusable="False" AllowDrop="True" DragDrop.DragEnter="File_DragEnter" DragDrop.Drop="File_Drop" PanningMode="Both" PreviewMouseWheel="cnvGraph_MouseWheel">
+                <Canvas Height="100" x:Name="cnvGraph" Width="200" ClipToBounds="True" MouseMove="imgGraph_MouseMove" MouseDown="imgGraph_MouseDown" MouseUp="cnvGraph_MouseUp" Cursor="Cross" UseLayoutRounding="True">
                     <Image Height="150" x:Name="imgGraph" Width="200" Canvas.Left="0" Canvas.Top="0"/>
                 </Canvas>
             </ScrollViewer>
@@ -85,7 +77,7 @@
             </Button>
         </Grid>
         <GridSplitter Grid.Column="0" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
-        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
+        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
         <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal" CanHorizontallyScroll="False" CanVerticallyScroll="False">
             <Button Height="26" HorizontalAlignment="Left" x:Name="btnOpen" VerticalAlignment="Top" Width="30" Click="OnOpenClicked" ToolTip="{DynamicResource tip_load}" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/LoadPicture.png"/>
@@ -111,6 +103,9 @@
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnLine" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_line}" Click="OnLineClicked" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Line.png"/>
             </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnFunc" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_func}" Click="OnFunctionClicked" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Function.png"/>
+            </Button>
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnDelPoints" VerticalAlignment="Top" Width="30" Click="OnDeletePointsClicked" ToolTip="{DynamicResource tip_delallpoints}" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Delete.png"/>
             </Button>
@@ -126,26 +121,26 @@
         </StackPanel>
         <Border x:Name="brdDgrFix" Margin="188,0,0,0" Grid.Row="1" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="12" Background="{StaticResource dgrHeaderBackground}"/>
         <Border Grid.ColumnSpan="3" Grid.Row="4" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left" Width="300">
-            <TextBlock x:Name="txtToolTip" Text="{DynamicResource tip_state_idle}" Margin="5,0,0,0" TextAlignment="Left" Grid.ColumnSpan="3" Foreground="#FFB4C4CE" VerticalAlignment="Center"/>
+            <TextBlock x:Name="txtToolTip" Text="{DynamicResource tip_state_idle}" Margin="5,0,0,0" TextAlignment="Left" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
         </Border>
         <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Border HorizontalAlignment="Right" MinWidth="40" Height="20">
-                <TextBlock x:Name="txtScreenCoords" Text="{DynamicResource tip_screen}" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+                <TextBlock x:Name="txtScreenCoords" Text="{DynamicResource tip_screen}" TextAlignment="Center" VerticalAlignment="Center" />
             </Border>
             <Border HorizontalAlignment="Right" MinWidth="50" Height="20">
-                <TextBlock x:Name="txtScreenX" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+                <TextBlock x:Name="txtScreenX" Text="0.0" TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <Border HorizontalAlignment="Right" MinWidth="50" Height="20">
-                <TextBlock x:Name="txtScreenY" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+                <TextBlock x:Name="txtScreenY" Text="0.0" TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <Border HorizontalAlignment="Right" MinWidth="35" Height="20">
-                <TextBlock x:Name="txtRealCoords" Text="{DynamicResource tip_real}" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+                <TextBlock x:Name="txtRealCoords" Text="{DynamicResource tip_real}" TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <Border HorizontalAlignment="Right" MinWidth="80" Height="20">
-                <TextBlock x:Name="txtRealX" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+                <TextBlock x:Name="txtRealX" Text="0.0" TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             <Border HorizontalAlignment="Right" MinWidth="80" Height="20">
-                <TextBlock x:Name="txtRealY" Text="0.0" TextAlignment="Center" VerticalAlignment="Center" Foreground="#FFB4C4CE" />
+                <TextBlock x:Name="txtRealY" Text="0.0" TextAlignment="Center" VerticalAlignment="Center"/>
             </Border>
         </StackPanel>
     </Grid>

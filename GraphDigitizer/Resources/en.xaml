@@ -9,7 +9,8 @@
     <sys:String x:Key="tip_setaxesprop">Set the properties of the axes</sys:String>
     <sys:String x:Key="tip_seltool">Selection tool (Hotkey: 1)</sys:String>
     <sys:String x:Key="tip_picktool">Pick point tool (Hotkey: 2)</sys:String>
-    <sys:String x:Key="tip_line">Draw a line in image (Hotkey: 3)</sys:String>
+    <sys:String x:Key="tip_line">Line tool (Hotkey: 3)</sys:String>
+    <sys:String x:Key="tip_func">Function tool (Hotkey: 4)</sys:String>
     <sys:String x:Key="tip_delallpoints">Delete all the selected points</sys:String>
     <sys:String x:Key="tip_zoomin">Increase the amount of zoom in the side image</sys:String>
     <sys:String x:Key="tip_zoomout">Decrease the amount of zoom in the side image</sys:String>
@@ -21,6 +22,7 @@
 
     <sys:String x:Key="tip_axestitle">Properties of the axes</sys:String>
     <sys:String x:Key="tip_linetitle">Specify points in line</sys:String>
+    <sys:String x:Key="tip_functitle">Function tool</sys:String>
     <sys:String x:Key="tip_pointscount">Points count</sys:String>
     <sys:String x:Key="tip_equalintev">Equal interval:</sys:String>
     <sys:String x:Key="tip_ofscreen">Of screen</sys:String>
@@ -35,6 +37,10 @@
     <sys:String x:Key="tip_about">About</sys:String>
     <sys:String x:Key="tip_screen">Screen:</sys:String>
     <sys:String x:Key="tip_real">Real:</sys:String>
+    <sys:String x:Key="tip_functionlist">Functions</sys:String>
+    <sys:String x:Key="tip_operatorlist">Operators</sys:String>
+    <sys:String x:Key="tip_variablelist">Variables</sys:String>
+    <sys:String x:Key="tip_xexpressiontip" xml:space="preserve">Usage 1：x1&#13;&#10;Usage 2：x1,x2,x3&#13;&#10;Usage 3：xmin:xmax&#13;&#10;Usage 4：xmin:dx:xmax&#13;&#10;Usage 5：x1,xmin:dx:xmax,x3,x4</sys:String>
     
     <sys:String x:Key="tip_state_idle">Load an image with the button above</sys:String>
     <sys:String x:Key="tip_state_axes0">Select the minor X value of the axis</sys:String>
@@ -45,7 +51,27 @@
     <sys:String x:Key="tip_state_line">Select two points to draw a line</sys:String>
     <sys:String x:Key="tip_state_select">Click on any point to select it</sys:String>
 
-    <sys:String x:Key="except_valid1">Invalid number input</sys:String>
+    <sys:String x:Key="except_valid0">Empty value!</sys:String>
+    <sys:String x:Key="except_valid1">Invalid input!</sys:String>
     <sys:String x:Key="except_valid2">Axes are not set yet!</sys:String>
     <sys:String x:Key="except_valid3">Value must be positive</sys:String>
+    <sys:String x:Key="except_valid4">Error exists in expression!</sys:String>
+
+    <!-- LoreSoft.MathExpressions -->
+    <sys:String x:Key="EvaluatePropertyCanNotBeNull">The IExpression.Evaluate property can not be null.</sys:String>
+    <sys:String x:Key="FunctionNameRegistered">The function name '{0}' is already registered.</sys:String>
+    <sys:String x:Key="InvalidCharacterEncountered">Invalid character: </sys:String>
+    <sys:String x:Key="InvalidConvertionExpression">Invalid convertion expression: </sys:String>
+    <sys:String x:Key="InvalidFunctionName">Invalid function name '{0}'.</sys:String>
+    <sys:String x:Key="InvalidLengthOfArray">Invalid length of array.</sys:String>
+    <sys:String x:Key="InvalidMathExpression">Invalid math expression.</sys:String>
+    <sys:String x:Key="InvalidNumberFormat">Invalid number format: </sys:String>
+    <sys:String x:Key="InvalidOperator">Invalid operator: </sys:String>
+    <sys:String x:Key="InvalidSymbolOnStack">Invalid symbol on stack: </sys:String>
+    <sys:String x:Key="InvalidVariableEncountered">Invalid function or variable: </sys:String>
+    <sys:String x:Key="NotEnoughNumbers">Invalid number for expression: </sys:String>
+    <sys:String x:Key="UnbalancedParentheses">Unbalanced parentheses.</sys:String>
+    <sys:String x:Key="VariableNameConflict">The variable name conflicts with function '{0}'.</sys:String>
+    <sys:String x:Key="VariableNameContainsLetters">The variable name can only contain letters.</sys:String>
+
 </ResourceDictionary>

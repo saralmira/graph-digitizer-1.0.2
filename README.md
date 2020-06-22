@@ -11,3 +11,5 @@ A standalone Winodws desktop tool to help you digitalize graphs
 2. Crosshair is added to both main window and subwindow for better locating.
 
 3. Line tool is available.
+
+4. Function tool is available.
