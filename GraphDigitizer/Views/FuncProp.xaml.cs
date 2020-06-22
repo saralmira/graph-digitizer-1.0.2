@@ -48,13 +48,12 @@ namespace GraphDigitizer.Views
             VariableItems = new NotifyClass.NotifyList<string>() 
         };
 
-        private readonly MathEvaluator evaluator;
+        private readonly MathEvaluator evaluator = new MathEvaluator();
 
         public FuncProp()
         {
             InitializeComponent();
             IsClosed = false;
-            evaluator = new MathEvaluator();
             maingrid.DataContext = Data;
         }
 
@@ -105,12 +104,14 @@ namespace GraphDigitizer.Views
             {
                 Data.Function = ReplaceVariable(Data.Function, "y", "x");
                 Data.FName = "f(x)";
+                evaluator.Variables["x"] = 0;
                 evaluator.Variables.Remove("y");
             }
             else
             {
                 Data.Function = ReplaceVariable(Data.Function, "x", "y");
-                Data.FName = "g(y)"; 
+                Data.FName = "g(y)";
+                evaluator.Variables["y"] = 0;
                 evaluator.Variables.Remove("x");
             }
         }

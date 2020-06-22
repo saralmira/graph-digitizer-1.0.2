@@ -162,7 +162,7 @@ namespace LoreSoft.MathExpressions
                 if (TryNumber(c, l))
                     continue;
 
-                if (TryString(c))
+                if (TryString(c, l))
                     continue;
 
                 if (TryStartGroup(c))
@@ -215,10 +215,13 @@ namespace LoreSoft.MathExpressions
             throw new ParseException(Resources.InvalidConvertionExpression + _buffer);
         }
 
-        private bool TryString(char c)
+        private bool TryString(char c, char l)
         {
             if (!char.IsLetter(c))
                 return false;
+
+            if (NumberExpression.IsNumber(l))
+                _symbolStack.Push("*");
 
             _buffer.Length = 0;
             _buffer.Append(c);
