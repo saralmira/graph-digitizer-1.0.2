@@ -26,8 +26,8 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="303*" />
         </Grid.ColumnDefinitions>
-        <Border Height="26" x:Name="brdToolBar" VerticalAlignment="Top" Grid.ColumnSpan="3" BorderBrush="#FF808080" BorderThickness="0,0,0,1"/>
-        <DataGrid x:Name="dgrPoints" Grid.Row="1" Block.TextAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" FontSize="12" ColumnWidth="95" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" SelectionChanged="dgrPoints_SelectionChanged" IsReadOnly="True" HeadersVisibility="Column" AutoGenerateColumns="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0,0,0,1" Background="{StaticResource dgrHeaderBackground}" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="Transparent" HorizontalAlignment="Stretch">
+        <Border Height="26" x:Name="brdToolBar" VerticalAlignment="Top" Grid.ColumnSpan="3" BorderBrush="#FF969696" BorderThickness="0,0,0,1"/>
+        <DataGrid x:Name="dgrPoints" Grid.Row="1" Block.TextAlignment="Center" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" FontSize="12" ColumnWidth="95" CanUserSortColumns="False" CanUserResizeRows="False" CanUserResizeColumns="False" CanUserReorderColumns="False" SelectionChanged="dgrPoints_SelectionChanged" IsReadOnly="True" HeadersVisibility="Column" AutoGenerateColumns="False" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0,0,0,1" BorderBrush="#FF969696" Background="{StaticResource dgrHeaderBackground}" HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="Transparent" HorizontalAlignment="Stretch">
             <DataGrid.Resources>
                 <RoutedUICommand x:Key="del" Text="Del"/>
             </DataGrid.Resources>
@@ -49,7 +49,7 @@
                 <DataGridTextColumn Header="Y Value" Binding="{Binding Yform}" ClipboardContentBinding="{Binding Y, StringFormat=F10}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <StatusBar x:Name="stbMain" Grid.Row="4" ClipToBounds="False" Background="{StaticResource dgrHeaderBackground}" Grid.ColumnSpan="3" BorderBrush="#FF555555" BorderThickness="0,1,0,0"/>
+        <StatusBar x:Name="stbMain" Grid.Row="4" ClipToBounds="False" Background="{StaticResource dgrHeaderBackground}" Grid.ColumnSpan="3" BorderBrush="#FF969696" BorderThickness="0,1,0,0"/>
         <Grid Grid.Column="2" Grid.Row="1" Grid.RowSpan="3">
             <ScrollViewer x:Name="svwGraph" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Focusable="False" AllowDrop="True" DragDrop.DragEnter="File_DragEnter" DragDrop.Drop="File_Drop" PanningMode="Both" PreviewMouseWheel="cnvGraph_MouseWheel">
                 <Canvas Height="100" x:Name="cnvGraph" Width="200" ClipToBounds="True" MouseMove="imgGraph_MouseMove" MouseDown="imgGraph_MouseDown" MouseUp="cnvGraph_MouseUp" Cursor="Cross" UseLayoutRounding="True">
@@ -63,8 +63,8 @@
                 <Image Source="../Resources/ZoomOut.png" Stretch="Uniform"/>
             </Button>
         </Grid>
-        
-        <Border Grid.Column="2" Grid.Row="1" x:Name="brdSeparator" Grid.RowSpan="3" BorderBrush="#FF45597C" BorderThickness="1,0,0,0"/>
+
+        <Border Grid.Column="2" Grid.Row="1" x:Name="brdSeparator" Grid.RowSpan="3" BorderBrush="#FF969696" BorderThickness="1,0,0,0"/>
         <Grid Grid.Row="3" Margin="0 1 0 0">
             <Canvas x:Name="cnvZoom" ClipToBounds="True" MouseMove="cnvZoom_MouseMove" Cursor="Cross">
                 <Image Canvas.Left="0" Canvas.Top="0" Height="151" x:Name="imgZoom" Stretch="Fill" Width="155" MouseDown="imgZoom_MouseDown" />
