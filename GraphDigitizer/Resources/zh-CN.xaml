@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     >
-    <sys:String x:Key="tip_load">载入图片</sys:String>
-    <sys:String x:Key="tip_loadfromcb">从剪贴板载入图片</sys:String>
-    <sys:String x:Key="tip_save">保存数据到文件</sys:String>
+    <sys:String x:Key="tip_load">载入图片 (快捷键: Ctrl+O)</sys:String>
+    <sys:String x:Key="tip_loadfromcb">从剪贴板载入图片 (快捷键: Ctrl+B)</sys:String>
+    <sys:String x:Key="tip_save">保存数据到文件 (快捷键: Ctrl+S)</sys:String>
     <sys:String x:Key="tip_setaxes">设置轴</sys:String>
     <sys:String x:Key="tip_setaxesprop">设置轴参数</sys:String>
     <sys:String x:Key="tip_seltool">选择工具 (快捷键: 1)</sys:String>

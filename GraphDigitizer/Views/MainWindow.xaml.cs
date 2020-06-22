@@ -376,14 +376,28 @@ namespace GraphDigitizer.Views
                 return;
             }
 
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || 
-                Keyboard.IsKeyDown(Key.RightCtrl) || 
-                Keyboard.IsKeyDown(Key.LeftAlt) ||
+            if (Keyboard.IsKeyDown(Key.LeftAlt) ||
                 Keyboard.IsKeyDown(Key.RightAlt) || 
                 Keyboard.IsKeyDown(Key.LeftShift) || 
                 Keyboard.IsKeyDown(Key.RightShift))
-            {
                 return;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                switch (e.Key)
+                {
+                    case Key.O:
+                        this.OnOpenClicked(sender, e);
+                        break;
+                    case Key.S:
+                        this.OnSaveClicked(sender, e);
+                        break;
+                    case Key.B:
+                        this.btnFromClipboard_Click(sender, e);
+                        break;
+                    default:
+                        return;
+                }
             }
 
             switch (e.Key)
@@ -969,7 +983,7 @@ namespace GraphDigitizer.Views
             }
         }
 
-        private void SaveToGDF(Stream stream)
+        private void SaveToGDF(Stream stream, bool strict = true)
         {
             using (var bw = new System.IO.BinaryWriter(stream))
             {
@@ -985,7 +999,7 @@ namespace GraphDigitizer.Views
                 else if (this.imgGraph.Source is BitmapImage bitmapImage)
                 {
                     var bmp = this.BufferFromImage(bitmapImage);
-                    if (bmp.Length > 1024 * 1024)
+                    if (!strict && bmp.Length > 128 * 1024)
                     {
                         bw.Write(false);
                         if (imagepath == null)
@@ -1063,7 +1077,8 @@ namespace GraphDigitizer.Views
                     else
                     {
                         imagepath = Encoding.Unicode.GetString(br.ReadBytes(imglen));
-                        bmp = new BitmapImage(new Uri(imagepath));
+                        if (File.Exists(imagepath))
+                            bmp = new BitmapImage(new Uri(imagepath));
                     }
                 }
                 this.prop = MinMax(br.ReadDouble(), MinZoomMain, MaxZoomMain);
@@ -1362,7 +1377,7 @@ namespace GraphDigitizer.Views
             try
             {
                 MemoryStream ms = new MemoryStream();
-                SaveToGDF(ms);
+                SaveToGDF(ms, false);
                 Properties.Settings.Default.LastFile = Util.Encode(ms.ToArray());
             }
             catch { }

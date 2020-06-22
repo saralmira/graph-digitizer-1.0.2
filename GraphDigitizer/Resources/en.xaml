@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     >
-    <sys:String x:Key="tip_load">Load a new image</sys:String>
-    <sys:String x:Key="tip_loadfromcb">Load an image from the clipboard</sys:String>
-    <sys:String x:Key="tip_save">Save the current data in a file</sys:String>
+    <sys:String x:Key="tip_load">Load a new image (Hotkey: Ctrl+O)</sys:String>
+    <sys:String x:Key="tip_loadfromcb">Load an image from the clipboard (Hotkey: Ctrl+B)</sys:String>
+    <sys:String x:Key="tip_save">Save the current data in a file (Hotkey: Ctrl+S)</sys:String>
     <sys:String x:Key="tip_setaxes">Set the image axes</sys:String>
     <sys:String x:Key="tip_setaxesprop">Set the properties of the axes</sys:String>
     <sys:String x:Key="tip_seltool">Selection tool (Hotkey: 1)</sys:String>
