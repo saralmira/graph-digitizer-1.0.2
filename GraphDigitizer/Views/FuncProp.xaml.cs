@@ -86,12 +86,6 @@ namespace GraphDigitizer.Views
             }
         }
 
-        private void Popup_Opened(object sender, EventArgs e)
-        {
-            Data.VariableItems.Clear();
-            Data.VariableItems.AddRange(evaluator.Variables.Keys);
-        }
-
         private void Window_Closed(object sender, EventArgs e)
         {
             IsClosed = true;
@@ -114,6 +108,8 @@ namespace GraphDigitizer.Views
                 evaluator.Variables["y"] = 0;
                 evaluator.Variables.Remove("x");
             }
+            Data.VariableItems.Clear();
+            Data.VariableItems.AddRange(evaluator.Variables.Keys);
         }
 
         private string ReplaceVariable(string exp, string oldvar, string newvar)
@@ -176,6 +172,7 @@ namespace GraphDigitizer.Views
         {
             ScrollViewer sv = sender as ScrollViewer;
             sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

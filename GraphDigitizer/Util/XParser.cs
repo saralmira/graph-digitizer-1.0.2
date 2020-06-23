@@ -100,6 +100,8 @@ namespace GraphDigitizer
         {
             if (double.IsNaN(value) || double.IsInfinity(value))
                 return value;
+            if (value == 0)
+                return 1.0;
 
             value = Math.Abs(value);
             string s = value.ToString();

@@ -52,7 +52,7 @@
                      AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
                      Text="{Binding Function,Mode=TwoWay}"/>
             <ToggleButton x:Name="tb2" Grid.Column="0" Grid.Row="1" Margin="5 5 0 5" Content="{Binding FName}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-            <Popup IsOpen="{Binding ElementName=tb2, Path=IsChecked}" Placement="Bottom" PlacementTarget="{Binding ElementName=tb2}" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide" Opened="Popup_Opened">
+            <Popup IsOpen="{Binding ElementName=tb2, Path=IsChecked}" Placement="Bottom" PlacementTarget="{Binding ElementName=tb2}" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
                 <Border CornerRadius="1" x:Name="DropDown" SnapsToDevicePixels="True" Width="200" Height="200">
                     <Border.Effect>
                         <DropShadowEffect Color="Black" Opacity="0.5" ShadowDepth="2"/>

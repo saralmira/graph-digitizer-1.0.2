@@ -420,9 +420,13 @@ namespace LoreSoft.MathExpressions
 
         private static int Precedence(string c)
         {
-            if (c.Length == 1 && (c[0] == '*' || c[0] == '/' || c[0] == '%'))
-                return 2;
-
+            if (c.Length == 1)
+            {
+                if (c[0] == '^')
+                    return 3;
+                else if (c[0] == '*' || c[0] == '/' || c[0] == '%')
+                    return 2;
+            }
             return 1;
         }
 
