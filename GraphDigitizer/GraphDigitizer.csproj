@@ -63,6 +63,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -145,6 +146,7 @@
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\ValidationRules.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Util\NonClientRegionAPI.cs" />
     <Compile Include="Util\Util.cs" />
     <Compile Include="Util\XParser.cs" />
     <Compile Include="Views\FuncProp.xaml.cs">

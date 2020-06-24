@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <SolidColorBrush x:Key="dgrHeaderBackground" Color="#EFEFEF"/>
     <SolidColorBrush x:Key="btnMouseOverBD" Color="#9F9F9F"/>
     <SolidColorBrush x:Key="btnMousePressBD" Color="#4096FF"/>
     <SolidColorBrush x:Key="btnMouseOverFX" Color="#DEDEDE"/>
@@ -27,7 +28,7 @@
                 <ControlTemplate x:Name="btnTemplate" TargetType="{x:Type Button}">
                     <Grid>
                         <Border x:Name="MouseRectangle" Background="{StaticResource btnMouseOverFX}" BorderBrush="{StaticResource btnMouseOverBD}" BorderThickness="0" CornerRadius="2" Opacity="0" Margin="0"/>
-                        <ContentPresenter x:Name="ButtonContent" Opacity=".3" Content="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Width="14" Height="14"/>
+                        <ContentPresenter x:Name="ButtonContent" Opacity=".3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Width="14" Height="14"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="Button.MouseEnter">
@@ -53,11 +54,18 @@
 
     <Style TargetType="{x:Type Button}" x:Key="ToolBarButtonStyle">
         <Style.Resources>
+            <RadialGradientBrush x:Key="RGBN" GradientOrigin="0.25,0.25" RadiusX="0.75" RadiusY="0.75">
+                <RadialGradientBrush.GradientStops>
+                    <GradientStop Color="White" Offset="0" />
+                    <GradientStop Color="Black" Offset="0.65" />
+                    <GradientStop Color="Gray" Offset="0.8" />
+                </RadialGradientBrush.GradientStops>
+            </RadialGradientBrush>
             <Storyboard x:Key="btnMouseEnter">
-                <DoubleAnimation x:Name="AnimMouseEnter" BeginTime="00:00:00" Storyboard.TargetName="MouseRectangle" Duration="00:00:00.200" From="0" To="0.7" Storyboard.TargetProperty="Opacity"/>
+                <DoubleAnimation BeginTime="00:00:00" Storyboard.TargetName="MouseRectangle" Duration="00:00:00.200" From="0" To="0.7" Storyboard.TargetProperty="Opacity"/>
             </Storyboard>
             <Storyboard x:Key="btnMouseLeave">
-                <DoubleAnimation x:Name="AnimMouseLeave" BeginTime="00:00:00" Storyboard.TargetName="MouseRectangle" Duration="00:00:00.200" From="0.7" To="0" Storyboard.TargetProperty="Opacity"/>
+                <DoubleAnimation BeginTime="00:00:00" Storyboard.TargetName="MouseRectangle" Duration="00:00:00.200" From="0.7" To="0" Storyboard.TargetProperty="Opacity"/>
             </Storyboard>
         </Style.Resources>
         <Setter Property="OverridesDefaultStyle" Value="False"/>
@@ -68,7 +76,7 @@
                 <ControlTemplate x:Name="btnTemplate" TargetType="{x:Type Button}">
                     <Grid>
                         <Border x:Name="MouseRectangle" Background="{StaticResource btnMouseOverFX}" BorderBrush="{StaticResource btnMouseOverBD}" BorderThickness="1" CornerRadius="2" Opacity="0" Margin="0,0,0,1"/>
-                        <ContentPresenter x:Name="ButtonContent" Opacity=".9" Content="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,3" Width="20" Height="20"/>
+                        <ContentPresenter x:Name="ButtonContent" Opacity=".9" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,3" Width="20" Height="20"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="Button.MouseEnter">
@@ -92,7 +100,6 @@
         </Setter>
     </Style>
 
-    <SolidColorBrush x:Key="dgrHeaderBackground" Color="#EFEFEF"/>
     <SolidColorBrush x:Key="BackgroundOver" Color="#E7E7E7"/>
     <SolidColorBrush x:Key="BackgroundPressed" Color="#D9D9D9"/>
     <SolidColorBrush x:Key="DisabledLight" Color="#E5E5E5"/>
@@ -190,7 +197,7 @@
                             Stretch="Fill"
                             Fill="{TemplateBinding Background}"/>
                         <Border x:Name="HeaderBackground" BorderBrush="{TemplateBinding SeparatorBrush}" BorderThickness="0 0 1 1"/>
-                        <ContentPresenter x:Name="HeaderContent" Content="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,0"/>
+                        <ContentPresenter x:Name="HeaderContent" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,0"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -215,7 +222,7 @@
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate x:Name="lblPoint">
+                <ControlTemplate x:Name="lblPoint" TargetType="{x:Type Label}">
                     <Grid>
                         <Border Background="#FFFC8A45" BorderBrush="#FF3E150A" BorderThickness="1" CornerRadius="7"/>
                         <Border CornerRadius="7" Opacity="0.5">
@@ -244,7 +251,7 @@
         <Setter Property="Foreground" Value="#FFCAD6DF"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate x:Name="lblPoint">
+                <ControlTemplate x:Name="lblPoint" TargetType="{x:Type Label}">
                     <Grid>
                         <Border Background="#FF233849" BorderBrush="#FFCAD6DF" BorderThickness="0.8" CornerRadius="7"/>
                         <Border>
@@ -307,7 +314,7 @@
                 <ControlTemplate x:Name="tmplScrollThumb" TargetType="{x:Type Thumb}">
                     <Grid>
                         <Border x:Name="brdThumb" CornerRadius="2" Background="{StaticResource BackgroundMedium2}" BorderThickness="1" BorderBrush="{StaticResource BackgroundDark}">
-                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Data="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
+                            <Path HorizontalAlignment="Center" VerticalAlignment="Center">
                             </Path>
                         </Border>
                     </Grid>
@@ -641,7 +648,6 @@
             <Grid>
                 <AdornedElementPlaceholder Name="customAdorner"/>
                 <Image Source="/Resources/error.png" Stretch="Uniform" Margin="0 0 5 0" Width="14" Height="14" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
-                <!--<TextBlock Text="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" Background="White" HorizontalAlignment="Right" Margin="0 0 5 0" Foreground="Red" VerticalAlignment="Center" IsHitTestVisible="False"/>-->
             </Grid>
         </Border>
     </ControlTemplate>
@@ -650,8 +656,7 @@
         <Border BorderThickness="1" CornerRadius="1" BorderBrush="Red">
             <Grid>
                 <AdornedElementPlaceholder Name="customAdorner"/>
-                <Image Source="/Resources/error.png" Stretch="Uniform" Margin="0 5 5 0" Width="14" Height="14" VerticalAlignment="Top" HorizontalAlignment="Right" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
-                <!--<TextBlock Text="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" Background="White" HorizontalAlignment="Right" Margin="0 0 5 0" Foreground="Red" VerticalAlignment="Center" IsHitTestVisible="False"/>-->
+                <Image Source="/Resources/error.png" Stretch="Uniform" Margin="0 3 5 0" Width="14" Height="14" VerticalAlignment="Top" HorizontalAlignment="Right" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
             </Grid>
         </Border>
     </ControlTemplate>
@@ -660,8 +665,7 @@
         <Border BorderThickness="1" CornerRadius="1" BorderBrush="Red">
             <Grid>
                 <AdornedElementPlaceholder Name="customAdorner"/>
-                <Image Source="/Resources/error.png" Stretch="Uniform" Margin="0 0 5 5" Width="14" Height="14" VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
-                <!--<TextBlock Text="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" Background="White" HorizontalAlignment="Right" Margin="0 0 5 0" Foreground="Red" VerticalAlignment="Center" IsHitTestVisible="False"/>-->
+                <Image Source="/Resources/error.png" Stretch="Uniform" Margin="0 0 5 3" Width="14" Height="14" VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"/>
             </Grid>
         </Border>
     </ControlTemplate>

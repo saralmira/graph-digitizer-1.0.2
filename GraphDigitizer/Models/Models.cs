@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace GraphDigitizer.Models
 {
-    public class LineModel
+    public class LineModel : NotifyClass
     {
-        public bool ScreenOrReal { get; set; }
-        public bool XOrY { get; set; }
-        public UInt32 Count { get; set; }
+        private bool _ScreenOrReal;
+        private bool _XOrY;
+        private UInt32 _Count;
+
+        public bool ScreenOrReal { get { return _ScreenOrReal; } set { _ScreenOrReal = value; Notify(nameof(ScreenOrReal)); } }
+        public bool XOrY { get { return _XOrY; } set { _XOrY = value; Notify(nameof(XOrY)); } }
+        public UInt32 Count { get { return _Count; } set { _Count = value; Notify(nameof(Count)); } }
     }
 }

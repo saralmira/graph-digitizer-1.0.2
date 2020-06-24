@@ -31,6 +31,11 @@ namespace GraphDigitizer
             MainWindow.AddRealPoint?.Invoke(realx, realy);
         }
 
+        public static void AddPoints()
+        {
+            MainWindow.AddPoints?.Invoke();
+        }
+
         public static string Encode(byte[] bytes)
         {
             StringBuilder sb = new StringBuilder(bytes.Length * 2);

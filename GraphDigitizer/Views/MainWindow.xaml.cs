@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,13 +40,15 @@ namespace GraphDigitizer.Views
         public delegate void delAddPoint(double realx, double realy);
         public static delAddPoint AddScreenPoint;
         public static delAddPoint AddRealPoint;
+        public delegate void delAddPoints();
+        public static delAddPoints AddPoints;
 
         private bool precisionMode = false;
         private bool dragMode = false;
         private Point previousPosition;
         private State state = State.Idle;
         private Axes axes = new Axes();
-        private LineModel linemodel = new LineModel() { Count = 2, ScreenOrReal = true };
+        private readonly LineModel linemodel = new LineModel() { Count = 2, ScreenOrReal = true, XOrY = true };
         private readonly List<DataPoint> data = new List<DataPoint>();
         private readonly Crosshair Crossair = new Crosshair();
         private readonly Crosshair CrossairL = new Crosshair();
@@ -96,6 +99,7 @@ namespace GraphDigitizer.Views
             RealToScreen = this.RealToScreenCoords;
             AddScreenPoint = this.AddPoint;
             AddRealPoint = this.AddPointReal;
+            AddPoints = this.AddPointsOfLine;
             this.dgrPoints.ItemsSource = this.data;
             this.axes.Xmin.Value = 0.0;
             this.axes.Xmax.Value = 1.0;
@@ -698,21 +702,20 @@ namespace GraphDigitizer.Views
         {
             if (this.state != State.Line || !this.useLineTool) return;
             if (this.precisionMode) this.ZoomModeOut(false);
-            var lp = new LineProp(this.linemodel);
-            lp.Owner = this;
-            if (lp.ShowDialog() == true)
-            {
-                double p = 100.0 / this.prop;
-                LinearModel lm = new LinearModel(LineTool.X1 * p, LineTool.Y1 * p, LineTool.X2 * p, LineTool.Y2 * p);
-                if (this.linemodel.ScreenOrReal)
-                    lm.Interp(this.linemodel.Count);
-                else
-                    lm.InterpInReal(this.linemodel.Count, this.linemodel.XOrY);
-                foreach (Vector v in lm.Points)
-                    this.AddPoint(v.X, v.Y);
-            }
             this.useLineTool = false;
-            this.LineTool.Visibility = Visibility.Hidden;
+            LineProp.Show(this, linemodel, LineTool);
+        }
+
+        private void AddPointsOfLine()
+        {
+            double p = 100.0 / this.prop;
+            LinearModel lm = new LinearModel(LineTool.X1 * p, LineTool.Y1 * p, LineTool.X2 * p, LineTool.Y2 * p);
+            if (this.linemodel.ScreenOrReal)
+                lm.Interp(this.linemodel.Count);
+            else
+                lm.InterpInReal(this.linemodel.Count, this.linemodel.XOrY);
+            foreach (Vector v in lm.Points)
+                this.AddPoint(v.X, v.Y);
         }
 
         private void DeletePoints()
@@ -1387,6 +1390,48 @@ namespace GraphDigitizer.Views
             Properties.Settings.Default.VerticalOffset = svwGraph.VerticalOffset;
             Properties.Settings.Default.Save();
         }
+
+        /*
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.MainWindow.Background = Brushes.Transparent;
+                // Obtain the window handle for WPF application
+                IntPtr mainWindowPtr = new WindowInteropHelper(this).Handle;
+                HwndSource mainWindowSrc = HwndSource.FromHwnd(mainWindowPtr);
+                mainWindowSrc.CompositionTarget.BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+
+                // Get System Dpi
+                System.Drawing.Graphics desktop = System.Drawing.Graphics.FromHwnd(mainWindowPtr);
+                float DesktopDpiX = desktop.DpiX;
+                float DesktopDpiY = desktop.DpiY;
+
+                // Set Margins
+                NonClientRegionAPI.MARGINS margins = new NonClientRegionAPI.MARGINS();
+
+                // Extend glass frame into client area
+                // Note that the default desktop Dpi is 96dpi. The  margins are
+                // adjusted for the system Dpi.
+                margins.cxLeftWidth = 0;// Convert.ToInt32(5 * (DesktopDpiX / 96));
+                margins.cxRightWidth = 0;// Convert.ToInt32(5 * (DesktopDpiX / 96));
+                margins.cyTopHeight = Convert.ToInt32(((int)brdToolBar.Height) * (DesktopDpiX / 96));
+                margins.cyBottomHeight = 0;// Convert.ToInt32(5 * (DesktopDpiX / 96));
+
+                int hr = NonClientRegionAPI.DwmExtendFrameIntoClientArea(mainWindowSrc.Handle, ref margins);
+                //
+                if (hr < 0)
+                {
+                    //DwmExtendFrameIntoClientArea Failed
+                }
+            }
+            // If not Vista, paint background white.
+            catch (DllNotFoundException)
+            {
+                Application.Current.MainWindow.Background = new SolidColorBrush(Color.FromArgb(0x90, 0xF0, 0xF0, 0xF0));
+            }
+        }
+        */
 
         private struct Rect
         {
