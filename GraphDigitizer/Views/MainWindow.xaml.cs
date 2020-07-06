@@ -256,12 +256,20 @@ namespace GraphDigitizer.Views
         private void imgGraph_MouseMove(object sender, MouseEventArgs e)
         {
             Point p = e.GetPosition(this.imgGraph);
-            if (this.dragMode && e.RightButton == MouseButtonState.Pressed && previousPosition != p)
+            if (this.dragMode)
             {
-                this.svwGraph.ScrollToHorizontalOffset(this.svwGraph.HorizontalOffset + (previousPosition.X - p.X) * 0.9);
-                this.svwGraph.ScrollToVerticalOffset(this.svwGraph.VerticalOffset + (previousPosition.Y - p.Y) * 0.9);
-                previousPosition = p;
-                return;
+                if (e.RightButton == MouseButtonState.Pressed)
+                {
+                    if (previousPosition != p)
+                    {
+                        this.svwGraph.ScrollToHorizontalOffset(this.svwGraph.HorizontalOffset + (previousPosition.X - p.X) * 0.9);
+                        this.svwGraph.ScrollToVerticalOffset(this.svwGraph.VerticalOffset + (previousPosition.Y - p.Y) * 0.9);
+                        previousPosition = p;
+                        return;
+                    }
+                }
+                else
+                    SetDragMode(false);
             }
             previousPosition = p;
             if (this.selecting) //Update selection rectangle position
@@ -610,8 +618,7 @@ namespace GraphDigitizer.Views
             Point p = e.GetPosition(this.imgGraph);
             if (e.ChangedButton == MouseButton.Right)
             {
-                this.dragMode = true;
-                this.cnvGraph.Cursor = Cursors.SizeAll;
+                SetDragMode(true);
                 CrossairL.Hide(true);
             }
             else if (this.state == State.Select)
@@ -1342,10 +1349,25 @@ namespace GraphDigitizer.Views
             {
                 if (e.RightButton == MouseButtonState.Released)
                 {
-                    this.dragMode = false;
-                    this.cnvGraph.Cursor = this.state == State.Select ? Cursors.Arrow : Cursors.Cross;
+                    SetDragMode(false);
                     SetCrosshair(e.GetPosition(this.imgGraph));
                 }
+            }
+        }
+
+        private void SetDragMode(bool drag)
+        {
+            if (drag == this.dragMode)
+                return;
+            if (drag)
+            {
+                this.dragMode = true;
+                this.cnvGraph.Cursor = Cursors.SizeAll;
+            }
+            else
+            {
+                this.dragMode = false;
+                this.cnvGraph.Cursor = this.state == State.Select ? Cursors.Arrow : Cursors.Cross;
             }
         }
 
