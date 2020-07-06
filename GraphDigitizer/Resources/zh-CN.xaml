@@ -16,6 +16,7 @@
     <sys:String x:Key="tip_zoomout">缩小侧边图像</sys:String>
     <sys:String x:Key="tip_enlarge">放大主图像</sys:String>
     <sys:String x:Key="tip_reduce">缩小主图像</sys:String>
+    <sys:String x:Key="tip_fitwindow">适合窗口</sys:String>
     <sys:String x:Key="tip_restore">恢复原图像大小</sys:String>
     <sys:String x:Key="tip_showhelp">帮助 (快捷键: H)</sys:String>
     <sys:String x:Key="tip_copypoints">复制所有点到剪贴板</sys:String>

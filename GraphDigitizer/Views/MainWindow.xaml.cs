@@ -476,6 +476,9 @@ namespace GraphDigitizer.Views
                 this.cnvGraph.Children.Remove(this.axes.Xaxis);
             }
 
+            if (!CheckCoord(this.axes.Xmin) || !CheckCoord(this.axes.Xmax))
+                return;
+
             this.axes.Xaxis = new Line
             {
                 X1 = this.axes.Xmin.X * this.prop / 100.0,
@@ -501,6 +504,9 @@ namespace GraphDigitizer.Views
                 this.cnvGraph.Children.Remove(this.axes.Yaxis);
             }
 
+            if (!CheckCoord(this.axes.Ymin) || !CheckCoord(this.axes.Ymax))
+                return;
+
             this.axes.Yaxis = new Line
             {
                 X1 = this.axes.Ymin.X * this.prop / 100.0,
@@ -516,6 +522,11 @@ namespace GraphDigitizer.Views
                 StrokeEndLineCap = PenLineCap.Round
             };
             this.cnvGraph.Children.Add(this.axes.Yaxis);
+        }
+
+        private bool CheckCoord(Coord coord)
+        {
+            return !double.IsNaN(coord.X) && !double.IsNaN(coord.Y);
         }
 
         private void SelectPoint(double X, double Y)
@@ -809,6 +820,14 @@ namespace GraphDigitizer.Views
             PropChange(false);
         }
 
+        private void OnResizeClicked(object sender, RoutedEventArgs e)
+        {
+            if (this.imgGraph.Source == null)
+                return;
+            if (this.imgGraph.Source is BitmapImage bitmapImage)
+                this.UpdateProportions(Math.Min(this.svwGraph.ActualWidth / bitmapImage.PixelWidth, this.svwGraph.ActualHeight / bitmapImage.PixelHeight) * 98.0);
+        }
+
         private void PropChange(bool enlarge, Point p)
         {
             double newprop;
@@ -995,7 +1014,7 @@ namespace GraphDigitizer.Views
 
         private void SaveToGDF(Stream stream, bool strict = true)
         {
-            using (var bw = new System.IO.BinaryWriter(stream))
+            using (var bw = new BinaryWriter(stream))
             {
                 var ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-GB");
@@ -1106,12 +1125,18 @@ namespace GraphDigitizer.Views
                     this.imgZoom.Height = bmp.PixelHeight * this.zoom;
                     this.imgZoom.Source = bmp;
 
-                    this.axes.Xmin.X = br.ReadDouble(); this.axes.Xmin.Y = br.ReadDouble(); this.axes.Xmin.Value = br.ReadDouble();
-                    this.axes.Xmax.X = br.ReadDouble(); this.axes.Xmax.Y = br.ReadDouble(); this.axes.Xmax.Value = br.ReadDouble();
+                    this.axes.Xmin.X = br.ReadDouble(); 
+                    this.axes.Xmin.Y = br.ReadDouble(); 
+                    this.axes.Xmin.Value = br.ReadDouble();
+                    this.axes.Xmax.X = br.ReadDouble(); 
+                    this.axes.Xmax.Y = br.ReadDouble(); 
+                    this.axes.Xmax.Value = br.ReadDouble();
                     this.axes.XLog = br.ReadBoolean();
                     this.CreateXaxis();
 
-                    this.axes.Ymin.X = br.ReadDouble(); this.axes.Ymin.Y = br.ReadDouble(); this.axes.Ymin.Value = br.ReadDouble();
+                    this.axes.Ymin.X = br.ReadDouble(); 
+                    this.axes.Ymin.Y = br.ReadDouble(); 
+                    this.axes.Ymin.Value = br.ReadDouble();
                     this.axes.Ymax.X = br.ReadDouble(); this.axes.Ymax.Y = br.ReadDouble(); this.axes.Ymax.Value = br.ReadDouble();
                     this.axes.YLog = br.ReadBoolean();
                     this.CreateYaxis();

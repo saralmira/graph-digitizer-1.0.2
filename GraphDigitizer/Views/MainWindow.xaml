@@ -62,6 +62,9 @@
             <Button Height="20" HorizontalAlignment="Left" Margin="21,0,0,0" x:Name="btnReduce" VerticalAlignment="Top" Width="20" Click="OnReduceClicked" ToolTip="{DynamicResource tip_reduce}" Style="{StaticResource ViewButtonStyle}">
                 <Image Source="../Resources/ZoomOut.png" Stretch="Uniform"/>
             </Button>
+            <Button Height="20" HorizontalAlignment="Left" Margin="41,0,0,0" x:Name="btnResize" VerticalAlignment="Top" Width="20" Click="OnResizeClicked" ToolTip="{DynamicResource tip_fitwindow}" Style="{StaticResource ViewButtonStyle}">
+                <Image Source="../Resources/resize.png" Stretch="Uniform"/>
+            </Button>
         </Grid>
 
         <Border Grid.Column="2" Grid.Row="1" x:Name="brdSeparator" Grid.RowSpan="3" BorderBrush="#FF969696" BorderThickness="1,0,0,0"/>

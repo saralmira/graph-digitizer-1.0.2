@@ -16,6 +16,7 @@
     <sys:String x:Key="tip_zoomout">Decrease the amount of zoom in the side image</sys:String>
     <sys:String x:Key="tip_enlarge">Enlarge the main image</sys:String>
     <sys:String x:Key="tip_reduce">Reduce the main image</sys:String>
+    <sys:String x:Key="tip_fitwindow">Fit window</sys:String>
     <sys:String x:Key="tip_restore">Restore the main image size</sys:String>
     <sys:String x:Key="tip_showhelp">Show the help window (Hotkey: H)</sys:String>
     <sys:String x:Key="tip_copypoints">Copy all the points to clipboard</sys:String>
