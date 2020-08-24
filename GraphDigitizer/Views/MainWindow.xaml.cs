@@ -352,15 +352,15 @@ namespace GraphDigitizer.Views
 
         private void OnWindowPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) && this.cnvGraph.IsMouseOver)
+            if (e.Key == Key.Space && this.cnvGraph.IsMouseOver)
             {
                 this.ZoomModeIn();
                 return;
             }
 
             if (Keyboard.IsKeyDown(Key.LeftAlt) ||
-                Keyboard.IsKeyDown(Key.RightAlt) || 
-                Keyboard.IsKeyDown(Key.LeftShift) || 
+                Keyboard.IsKeyDown(Key.RightAlt) ||
+                Keyboard.IsKeyDown(Key.LeftShift) ||
                 Keyboard.IsKeyDown(Key.RightShift))
                 return;
 
@@ -369,15 +369,19 @@ namespace GraphDigitizer.Views
                 switch (e.Key)
                 {
                     case Key.O:
+                        this.OnWindowPreviewKeyUp(sender, e);
                         this.OnOpenClicked(sender, e);
                         break;
                     case Key.S:
+                        this.OnWindowPreviewKeyUp(sender, e);
                         this.OnSaveClicked(sender, e);
                         break;
                     case Key.B:
+                        this.OnWindowPreviewKeyUp(sender, e);
                         this.btnFromClipboard_Click(sender, e);
                         break;
                     case Key.A:
+                        this.OnWindowPreviewKeyUp(sender, e);
                         this.btnScreenshot_Click(sender, e);
                         break;
                     default:
@@ -390,7 +394,7 @@ namespace GraphDigitizer.Views
                 case Key.Delete:
                     this.DeleteSelection(sender, e);
                     break;
-                case Key.F1:
+                case Key.H:
                     this.OnHelpClicked(sender, e);
                     break;
                 case Key.D1:
@@ -422,7 +426,7 @@ namespace GraphDigitizer.Views
 
         private void OnWindowPreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if ((e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl) && this.precisionMode)
+            if (e.Key == Key.Space && this.precisionMode)
                 this.ZoomModeOut();
         }
 
