@@ -1216,9 +1216,11 @@ namespace GraphDigitizer.Views
         private void btnScreenshot_Click(object sender, RoutedEventArgs e)
         {
             WindowState ws = this.WindowState;
-            this.WindowState = WindowState.Minimized;
+            //this.WindowState = WindowState.Minimized;
+            this.Hide();
             Screenshot.ScreenshotController.CaptureScreen();
-            this.WindowState = ws;
+            //this.WindowState = ws;
+            this.Show();
             Screenshot.ScreenshotController.screenshot.Activate();
             Screenshot.ScreenshotController.screenshot.Focus();
         }
