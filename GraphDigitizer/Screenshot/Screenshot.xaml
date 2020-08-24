@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:GraphDigitizer.Screenshot"
         mc:Ignorable="d" Topmost="True" ShowInTaskbar="False" WindowStyle="None"
         Height="450" Width="800" ResizeMode="NoResize" BorderThickness="0"
-        LostFocus="Window_LostFocus" PreviewMouseDown="Window_PreviewMouseDown" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown"
-        PreviewMouseMove="Window_PreviewMouseMove" PreviewMouseUp="Window_PreviewMouseUp">
+        LostFocus="Window_LostFocus" PreviewMouseDown="Window_PreviewMouseDown" Closing="Window_Closing" 
+        PreviewKeyDown="Window_PreviewKeyDown" PreviewMouseMove="Window_PreviewMouseMove" PreviewMouseUp="Window_PreviewMouseUp">
     <Grid>
         <Image x:Name="img" Stretch="Fill" IsHitTestVisible="False"/>
-        <DockPanel>
+        <DockPanel IsHitTestVisible="False">
             <Border x:Name="layer_left" DockPanel.Dock="Left" Width="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" HorizontalAlignment="Left" IsHitTestVisible="False"/>
             <Border x:Name="layer_top" DockPanel.Dock="Top" Height="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" VerticalAlignment="Top" IsHitTestVisible="False"/>
             <Border x:Name="layer_right" DockPanel.Dock="Right" Width="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" HorizontalAlignment="Right" IsHitTestVisible="False"/>

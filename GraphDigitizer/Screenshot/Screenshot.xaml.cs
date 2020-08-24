@@ -58,6 +58,7 @@ namespace GraphDigitizer.Screenshot
             StartPoint = new Point();
             EndPoint = new Point(ScreenBitmap.Width, ScreenBitmap.Height);
             this.Show();
+            this.Focus();
         }
 
         public void CloseVisually()
@@ -93,11 +94,7 @@ namespace GraphDigitizer.Screenshot
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Right)
-            {
-                CloseVisually();
-            }
-            else if (e.ChangedButton == MouseButton.Left && !IsCapturing)
+            if (e.ChangedButton == MouseButton.Left && !IsCapturing)
             {
                 StartPoint = e.GetPosition(this);
                 IsCapturing = true;
@@ -118,6 +115,11 @@ namespace GraphDigitizer.Screenshot
 
         private void Window_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
+            if (e.ChangedButton == MouseButton.Right)
+            { 
+                CloseVisually();
+                return;
+            }
             if (!IsCapturing || e.ChangedButton != MouseButton.Left)
                 return;
             IsCapturing = false;

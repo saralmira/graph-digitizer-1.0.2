@@ -1215,7 +1215,8 @@ namespace GraphDigitizer.Views
             this.WindowState = WindowState.Minimized;
             Screenshot.ScreenshotController.CaptureScreen();
             this.WindowState = ws;
-            //AutoResize();
+            Screenshot.ScreenshotController.screenshot.Activate();
+            Screenshot.ScreenshotController.screenshot.Focus();
         }
 
         private string Dict(string key)

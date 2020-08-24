@@ -11,7 +11,7 @@ namespace GraphDigitizer.Screenshot
     public static class ScreenshotController
     {
         private static Screenshot _screenshot = null;
-        private static Screenshot screenshot 
+        public static Screenshot screenshot 
         { 
             get 
             {
