@@ -88,9 +88,13 @@
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnFromClipboard" VerticalAlignment="Top" Width="30" Click="btnFromClipboard_Click" ToolTip="{DynamicResource tip_loadfromcb}" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Clipboard.png"/>
             </Button>
+            <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnScreenshot" VerticalAlignment="Top" Width="30" Click="btnScreenshot_Click" ToolTip="{DynamicResource tip_screenshot}" Style="{StaticResource ToolBarButtonStyle}">
+                <Image Source="../Resources/Screenshot.png"/>
+            </Button>
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnSave" VerticalAlignment="Top" Width="30" Click="OnSaveClicked" ToolTip="{DynamicResource tip_save}" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Save.png"/>
             </Button>
+            <Separator Height="22" Width="1" Margin="1,0,0,0" BorderBrush="LightGray" BorderThickness="1" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" VerticalAlignment="Stretch" HorizontalAlignment="Left" IsHitTestVisible="False"/>
             <Button Height="26" HorizontalAlignment="Left" Margin="1,0,0,0" x:Name="btnAxes" VerticalAlignment="Top" Width="30" ToolTip="{DynamicResource tip_setaxes}" Click="btnAxes_Click" Style="{StaticResource ToolBarButtonStyle}">
                 <Image Source="../Resources/Axes.png"/>
             </Button>

@@ -52,6 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\graph.ico</ApplicationIcon>
@@ -86,6 +87,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\zh-CN.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Screenshot\Screenshot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -145,6 +150,12 @@
     <Compile Include="Models\LinearModel.cs" />
     <Compile Include="Models\Models.cs" />
     <Compile Include="Models\ValidationRules.cs" />
+    <Compile Include="Screenshot\Screenshot.xaml.cs">
+      <DependentUpon>Screenshot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Screenshot\ScreenshotController.cs" />
+    <Compile Include="Screenshot\Util.cs" />
+    <Compile Include="Screenshot\Win32Api.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Util\NonClientRegionAPI.cs" />
     <Compile Include="Util\Util.cs" />
@@ -278,6 +289,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\resize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Screenshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LoreSoft.MathExpressions\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

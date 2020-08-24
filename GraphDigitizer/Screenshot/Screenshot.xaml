@@ -1,0 +1,21 @@
+﻿<Window x:Class="GraphDigitizer.Screenshot.Screenshot"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GraphDigitizer.Screenshot"
+        mc:Ignorable="d" Topmost="True" ShowInTaskbar="False" WindowStyle="None"
+        Height="450" Width="800" ResizeMode="NoResize" BorderThickness="0"
+        LostFocus="Window_LostFocus" PreviewMouseDown="Window_PreviewMouseDown" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewMouseMove="Window_PreviewMouseMove" PreviewMouseUp="Window_PreviewMouseUp">
+    <Grid>
+        <Image x:Name="img" Stretch="Fill" IsHitTestVisible="False"/>
+        <DockPanel>
+            <Border x:Name="layer_left" DockPanel.Dock="Left" Width="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+            <Border x:Name="layer_top" DockPanel.Dock="Top" Height="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" VerticalAlignment="Top" IsHitTestVisible="False"/>
+            <Border x:Name="layer_right" DockPanel.Dock="Right" Width="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" HorizontalAlignment="Right" IsHitTestVisible="False"/>
+            <Border x:Name="layer_bottom" DockPanel.Dock="Bottom" Height="0" BorderThickness="0" Background="Black" Opacity="0.6" Visibility="Visible" VerticalAlignment="Bottom" IsHitTestVisible="False"/>
+            <Border x:Name="capture" BorderBrush="Blue" BorderThickness="2" Background="Transparent" Visibility="Visible" IsHitTestVisible="False"/>
+        </DockPanel>
+    </Grid>
+</Window>

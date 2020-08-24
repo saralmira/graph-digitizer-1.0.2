@@ -95,6 +95,7 @@ namespace GraphDigitizer.Views
         public MainWindow()
         {
             this.InitializeComponent();
+
             ScreenToReal = this.ScreenToRealCoords;
             RealToScreen = this.RealToScreenCoords;
             AddScreenPoint = this.AddPoint;
@@ -132,6 +133,7 @@ namespace GraphDigitizer.Views
 
             svwGraph.ScrollToHorizontalOffset(Properties.Settings.Default.HorizontalOffset);
             svwGraph.ScrollToVerticalOffset(Properties.Settings.Default.VerticalOffset);
+            Screenshot.ScreenshotController.SetImageEvent = new Screenshot.ScreenshotController.SetImage(this.SetCurrentImageAndResize);
         }
 
         private void OpenFile(string path)
@@ -139,39 +141,7 @@ namespace GraphDigitizer.Views
             var bmp = new BitmapImage(new Uri(path));
             imagepath = path;
 
-            //Since everything will be deleted, there is no need for calling UpdateProportions(100.0)
-            this.prop = 100;
-
-            this.imgGraph.Width = bmp.PixelWidth;
-            this.imgGraph.Height = bmp.PixelHeight;
-            this.imgGraph.Source = bmp;
-            this.cnvGraph.Width = bmp.PixelWidth;
-            this.cnvGraph.Height = bmp.PixelHeight;
-
-            this.imgZoom.Width = bmp.PixelWidth * this.zoom;
-            this.imgZoom.Height = bmp.PixelHeight * this.zoom;
-            this.imgZoom.Source = bmp;
-
-            this.state = State.Axes;
-            this.axes.Status = 0;
-
-            this.DeletePoints();
-            if (this.axes.Xaxis != null)
-            {
-                this.cnvGraph.Children.Remove(this.axes.Xaxis);
-                this.axes.Xaxis = null;
-            }
-
-            if (this.axes.Yaxis != null)
-            {
-                this.cnvGraph.Children.Remove(this.axes.Yaxis);
-                this.axes.Yaxis = null;
-            }
-
-            this.axes.Xmin.X = this.axes.Xmin.Y = this.axes.Xmax.X = this.axes.Xmax.Y = this.axes.Ymin.X = this.axes.Ymin.Y = this.axes.Ymax.X = this.axes.Ymax.Y = double.NaN;
-
-            this.SetToolTip();
-            this.cnvGraph.Cursor = Cursors.Cross;
+            SetCurrentImage(bmp);
         }
 
         private void LoadImageFromFile(string path)
@@ -406,6 +376,9 @@ namespace GraphDigitizer.Views
                         break;
                     case Key.B:
                         this.btnFromClipboard_Click(sender, e);
+                        break;
+                    case Key.A:
+                        this.btnScreenshot_Click(sender, e);
                         break;
                     default:
                         return;
@@ -822,10 +795,15 @@ namespace GraphDigitizer.Views
 
         private void OnResizeClicked(object sender, RoutedEventArgs e)
         {
+            AutoResize();
+        }
+
+        private void AutoResize()
+        {
             if (this.imgGraph.Source == null)
                 return;
-            if (this.imgGraph.Source is BitmapImage bitmapImage)
-                this.UpdateProportions(Math.Min(this.svwGraph.ActualWidth / bitmapImage.PixelWidth, this.svwGraph.ActualHeight / bitmapImage.PixelHeight) * 98.0);
+            if (this.imgGraph.Source is BitmapSource bitmapSource)
+                this.UpdateProportions(Math.Min(this.svwGraph.ActualWidth / bitmapSource.PixelWidth, this.svwGraph.ActualHeight / bitmapSource.PixelHeight) * 98.0);
         }
 
         private void PropChange(bool enlarge, Point p)
@@ -1016,8 +994,8 @@ namespace GraphDigitizer.Views
         {
             using (var bw = new BinaryWriter(stream))
             {
-                var ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
-                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-GB");
+                //var ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-GB");
 
                 if (this.imgGraph.Source == null)
                 {
@@ -1025,9 +1003,9 @@ namespace GraphDigitizer.Views
                     bw.Write(0);
                     return;
                 }
-                else if (this.imgGraph.Source is BitmapImage bitmapImage)
+                else if (this.imgGraph.Source is BitmapSource bitmapSource)
                 {
-                    var bmp = this.BufferFromImage(bitmapImage);
+                    var bmp = this.BufferFromImage(bitmapSource);
                     if (!strict && bmp.Length > 128 * 1024)
                     {
                         bw.Write(false);
@@ -1085,7 +1063,7 @@ namespace GraphDigitizer.Views
                 }
 
                 bw.Close();
-                System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
             }
         }
 
@@ -1093,10 +1071,10 @@ namespace GraphDigitizer.Views
         {
             using (var br = new BinaryReader(stream))
             {
-                var ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
-                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-GB");
+                //var ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-GB");
 
-                BitmapImage bmp = null;
+                BitmapSource bmp = null;
                 bool isbytes = br.ReadBoolean();
                 int imglen = br.ReadInt32();
                 if (imglen > 0)
@@ -1156,11 +1134,11 @@ namespace GraphDigitizer.Views
                     this.cnvGraph.Cursor = Cursors.Cross;
                 }
 
-                System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
+                //System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
             }
         }
 
-        public BitmapImage ImageFromBuffer(Byte[] bytes)
+        public BitmapSource ImageFromBuffer(Byte[] bytes)
         {
             var stream = new MemoryStream(bytes);
             var image = new BitmapImage();
@@ -1170,7 +1148,7 @@ namespace GraphDigitizer.Views
             return image;
         }
 
-        public Byte[] BufferFromImage(BitmapImage imageSource)
+        public Byte[] BufferFromImage(BitmapSource imageSource)
         {
             var ms = new MemoryStream();
             var enc = new PngBitmapEncoder();
@@ -1187,8 +1165,11 @@ namespace GraphDigitizer.Views
                 return;
             }
 
-            var bmp = Clipboard.GetImage();
+            SetCurrentImage(Clipboard.GetImage());
+        }
 
+        private void SetCurrentImage(BitmapSource bmp)
+        {
             //Since everything will be deleted, there is no need for calling UpdateProportions(100.0)
             this.prop = 100;
 
@@ -1220,6 +1201,21 @@ namespace GraphDigitizer.Views
 
             this.SetToolTip();
             this.cnvGraph.Cursor = Cursors.Cross;
+        }
+
+        private void SetCurrentImageAndResize(BitmapSource bmp)
+        {
+            SetCurrentImage(bmp);
+            AutoResize();
+        }
+
+        private void btnScreenshot_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState ws = this.WindowState;
+            this.WindowState = WindowState.Minimized;
+            Screenshot.ScreenshotController.CaptureScreen();
+            this.WindowState = ws;
+            //AutoResize();
         }
 
         private string Dict(string key)

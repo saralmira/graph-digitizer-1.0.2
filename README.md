@@ -13,3 +13,5 @@ A standalone Winodws desktop tool to help you digitalize graphs
 3. Line tool is available.
 
 4. Function tool is available.
+
+5. Screenshot is available.
