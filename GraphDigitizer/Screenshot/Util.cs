@@ -91,7 +91,7 @@ namespace GraphDigitizer.Screenshot
             using (var tempBitmap = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
             using (var g = Graphics.FromImage(tempBitmap))
             {
-                g.CopyFromScreen(0, 0, 0, 0, new System.Drawing.Size(width, height));
+                g.CopyFromScreen(0, 0, 0, 0, new Size(width, height));
 
                 var data = tempBitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 try

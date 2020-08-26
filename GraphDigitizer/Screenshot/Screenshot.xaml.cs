@@ -43,28 +43,38 @@ namespace GraphDigitizer.Screenshot
         public delegate void CloseDelegate();
         public CloseDelegate CloseEvent;
 
+        private void InitializeWindow()
+        {
+            ScreenBitmap = Util.ScreenSnapshot();
+            IsCapturing = false;
+            IsDragged = false;
+            CapturedBitmap = null;
+            this.WindowState = WindowState.Maximized;
+            img.Source = ScreenBitmap;
+            layer_left.Width = 0;
+            layer_top.Height = 0;
+            layer_right.Width = 0;
+            layer_bottom.Height = 0;
+            //this.Visibility = Visibility.Visible;
+            StartPoint = new Point();
+            EndPoint = new Point(ScreenBitmap.Width, ScreenBitmap.Height);
+        }
+
         public void ShowVisually()
         {
             //if (IsClosed)
             //    return;
-            ScreenBitmap = Util.ScreenSnapshot();
-            IsCapturing = false;
-            CapturedBitmap = null;
             //var handle = new WindowInteropHelper(this).Handle;
             //Screen screen = Screen.FromHandle(handle);
-            this.WindowState = WindowState.Maximized;
-            img.Source = ScreenBitmap;
-            //this.Visibility = Visibility.Visible;
-            StartPoint = new Point();
-            EndPoint = new Point(ScreenBitmap.Width, ScreenBitmap.Height);
+            InitializeWindow();
             this.Show();
             this.Focus();
         }
 
         public void CloseVisually()
         {
-            this.Visibility = Visibility.Collapsed;
             CloseEvent?.Invoke();
+            this.Close();
         }
 
         private void Window_LostFocus(object sender, RoutedEventArgs e)
@@ -148,6 +158,8 @@ namespace GraphDigitizer.Screenshot
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsClosed = true;
+            //e.Cancel = true;
+            //this.Hide();
         }
     }
 }

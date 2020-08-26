@@ -31,7 +31,6 @@ namespace GraphDigitizer.Screenshot
         {
             if (screenshot.CapturedBitmap != null)
                 SetImageEvent?.Invoke(screenshot.CapturedBitmap);
-            screenshot.Close();
         }
 
         public static void CaptureScreen()
